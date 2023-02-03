@@ -1,0 +1,17 @@
+/*
+┌────────────────────────────┐
+│　Description：
+│　Author：
+│　Remark：
+└────────────────────────────┘
+┌──────────────┐                                   
+│　ClassName：#SCRIPTNAME#
+└──────────────┘
+*/
+
+    #ROOTNAMESPACEBEGIN#
+public class #SCRIPTNAME#
+{
+
+}
+#ROOTNAMESPACEEND#

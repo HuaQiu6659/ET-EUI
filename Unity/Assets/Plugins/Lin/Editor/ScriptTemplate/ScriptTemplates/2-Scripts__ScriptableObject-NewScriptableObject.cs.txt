@@ -1,0 +1,19 @@
+/*
+┌────────────────────────────┐
+│　Description：
+│　Author：
+│　Remark：
+└────────────────────────────┘
+┌──────────────┐                                   
+│　ClassName：#SCRIPTNAME#
+└──────────────┘
+*/
+using UnityEngine;
+
+    #ROOTNAMESPACEBEGIN#
+[CreateAssetMenu(fileName = "#SCRIPTNAME#_", menuName ="ScriptableObject/#SCRIPTNAME#")]
+public class #SCRIPTNAME# : ScriptableObject
+{
+
+}
+#ROOTNAMESPACEEND#

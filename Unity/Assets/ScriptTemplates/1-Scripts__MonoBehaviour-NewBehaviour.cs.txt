@@ -1,0 +1,20 @@
+/*
+┌────────────────────────────┐
+│　Description：
+│　Author：
+│　Remark：
+└────────────────────────────┘
+┌──────────────┐                                   
+│　ClassName：#SCRIPTNAME#
+└──────────────┘
+*/
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+    #ROOTNAMESPACEBEGIN#
+public class #SCRIPTNAME# : MonoBehaviour
+{
+
+}
+#ROOTNAMESPACEEND#
