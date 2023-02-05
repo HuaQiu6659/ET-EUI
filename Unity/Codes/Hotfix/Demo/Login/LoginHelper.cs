@@ -5,40 +5,40 @@ namespace ET
 {
     public static class LoginHelper
     {
-        public static async ETTask Login(Scene zoneScene, string address, string account, string password)
+        public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
         {
+            A2C_LoginAccount a2C_Login = null;
+            Session accountSession = null;
+
             try
             {
-                // 创建一个ETModel层的Session
-                R2C_Login r2CLogin;
-                Session session = null;
-                try
-                {
-                    session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
-                    {
-                        r2CLogin = (R2C_Login) await session.Call(new C2R_Login() { Account = account, Password = password });
-                    }
-                }
-                finally
-                {
-                    session?.Dispose();
-                }
+                accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                a2C_Login = (A2C_LoginAccount)await accountSession.Call(new C2A_LoginAccount() { Account = account, Password = password });
 
-                // 创建一个gate Session,并且保存到SessionComponent中
-                Session gateSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(r2CLogin.Address));
-                gateSession.AddComponent<PingComponent>();
-                zoneScene.AddComponent<SessionComponent>().Session = gateSession;
-				
-                G2C_LoginGate g2CLoginGate = (G2C_LoginGate)await gateSession.Call(
-                    new C2G_LoginGate() { Key = r2CLogin.Key, GateId = r2CLogin.GateId});
+                if (a2C_Login.Error != ErrorCode.ERR_Success)
+                    return LoginError(a2C_Login.Error);
 
-                Log.Debug("登陆gate成功!");
-
-                Game.EventSystem.PublishAsync(new EventType.LoginFinish() {ZoneScene = zoneScene}).Coroutine();
             }
             catch (Exception e)
             {
-                Log.Error(e);
+                Log.Error(e.Message);
+                return LoginError(ErrorCode.ERR_NetworkError);
+            }
+
+            //登录成功 保存连接 保存Token
+            zoneScene.AddComponent<SessionComponent>().Session = accountSession;
+
+            var accountInfoCmp = zoneScene.GetComponent<AccountInfoComponent>();
+            accountInfoCmp.token = a2C_Login.Token;
+            accountInfoCmp.accountId = a2C_Login.AccountId;
+
+            return ErrorCode.ERR_Success;
+
+            //登录失败，断开连接
+            int LoginError(int errorCode)
+            {
+                accountSession?.Dispose();
+                return errorCode;
             }
         } 
     }

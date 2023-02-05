@@ -12,6 +12,7 @@ namespace ET
             return await Create(parent, instanceId, instanceId, parent.DomainZone(), name, sceneType);
         }
         
+        //创建配置表中各种Scene
         public static async ETTask<Scene> Create(Entity parent, long id, long instanceId, int zone, string name, SceneType sceneType, StartSceneConfig startSceneConfig = null)
         {
             await ETTask.CompletedTask;
@@ -35,6 +36,11 @@ namespace ET
                     break;
                 case SceneType.Location:
                     scene.AddComponent<LocationComponent>();
+                    break;
+
+                case SceneType.Account:
+                    //需要对外连接
+                    scene.AddComponent<NetKcpComponent, IPEndPoint, int>(startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
                     break;
             }
 
