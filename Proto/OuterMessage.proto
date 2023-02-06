@@ -240,7 +240,7 @@ message M2C_TransferMap // IActorLocationResponse
 }
 
 //ResponseType A2C_LoginAccount
-message C2A_LoginAccount //IRequest
+message C2A_LoginAccount // IRequest
 {
 	int32 RpcId = 90;
 
@@ -256,4 +256,34 @@ message A2C_LoginAccount	//IResponse
 
 	string Token = 1;	//当Token错误时跟游戏服务器的连接断开
 	int64 AccountId = 2;
+}
+
+message A2C_Disconnect // IMessage
+{
+	int32 Error = 1;
+}
+
+message ServerInfoProto
+{
+	int64 Id = 1;
+	int32 Status = 2;
+	string ServerName = 3;
+}
+
+//ResponseType A2C_LoginAccount
+message C2A_GetServerInfoRequest // IRequest
+{
+	int32 RpcId = 90;
+
+	string Token = 1;
+	int64 AccountId = 2;
+}
+
+message A2C_GetServerInfoResponse // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	repeated ServerInfoProto ServerInfos = 1;
 }

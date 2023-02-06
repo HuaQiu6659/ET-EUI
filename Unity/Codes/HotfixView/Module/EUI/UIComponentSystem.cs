@@ -228,7 +228,7 @@ namespace ET
         /// </summary>
         /// <OtherParam name="id"></OtherParam>
         /// <OtherParam name="onComplete"></OtherParam>
-        public static void HideWindow(this UIComponent self,WindowID id)
+        public static void HideWindow(this UIComponent self, WindowID id)
         {
             if (!self.VisibleWindowsDic.ContainsKey((int)id))
             {

@@ -189,7 +189,7 @@ namespace ET
         
   #region UI按钮事件
 
-      public static void AddListenerAsyncWithId(this Button button, Func<int, ETTask> action,int id)
+      public static void AddListenerAsyncWithId(this Button button, Func<int, ETTask> action, int id)
       { 
           button.onClick.RemoveAllListeners();
 
@@ -202,16 +202,9 @@ namespace ET
                    
           button.onClick.AddListener(() =>
           {
-              if ( UIEventComponent.Instance == null)
-              {
+              if (UIEventComponent.Instance?.IsClicked ?? true) 
                   return;
-              }
 
-              if (UIEventComponent.Instance.IsClicked)
-              {
-                  return;
-              }
-                       
               clickActionAsync().Coroutine();
           });
       }
@@ -229,16 +222,9 @@ namespace ET
                
           button.onClick.AddListener(() =>
           {
-              if ( UIEventComponent.Instance == null)
-              {
+              if (UIEventComponent.Instance?.IsClicked ?? true)
                   return;
-              }
 
-              if (UIEventComponent.Instance.IsClicked)
-              {
-                  return;
-              }
-                   
               clickActionAsync().Coroutine();
           });
       }

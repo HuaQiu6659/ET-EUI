@@ -15,11 +15,18 @@ namespace ET
         // 200001以上不抛异常
 
         //登录部分
-        public const int ERR_EmptyAccount = 200001;
-        public const int ERR_EmptyPassword = 200002;
+        public const int ERR_BlackList              = 200001;   //账号封禁
+        public const int ERR_WrongPassword          = 200002;   //密码错误
+        public const int ERR_LoginElsewhere         = 200003;   //在其他地方登录
+        public const int ERR_AccountEqualPassword   = 200004;   //账号密码相同
 
         //通用部分
-        public const int ERR_WrongScene = 300000;
-        public const int ERR_NetworkError = 300001; //网络错误
+        public const int ERR_WrongScene             = 300000;
+        public const int ERR_NetworkError           = 300001;   //网络错误
+        public const int ERR_EmptyInput             = 300002;
+        public const int ERR_IllegalInput           = 300003;   //非法字符串
+        public const int ERR_MultipleRequest        = 300004;   //多次请求
+        public const int ERR_TimeOut                = 300005;   //时间过长（无操作）
+
     }
 }

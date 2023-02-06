@@ -7,5 +7,7 @@
         public const int AITimer = 1002;
         public const int SessionAcceptTimeout = 1003;
         // 不能超过10000
+
+        public const int AccountCheckOutTime = 1004;    //账号长时间无操作
     }
 }

@@ -41,6 +41,12 @@ namespace ET
                 case SceneType.Account:
                     //需要对外连接
                     scene.AddComponent<NetKcpComponent, IPEndPoint, int>(startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
+                    scene.AddComponent<TokenComponent>();
+                    scene.AddComponent<AccountSessionsComponent>();
+                    break;
+
+                case SceneType.LoginCenter:
+                    scene.AddComponent<LoginInfoRecordComponent>();
                     break;
             }
 

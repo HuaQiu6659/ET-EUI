@@ -22,8 +22,8 @@ namespace ET
     {
         public override void Destroy(AccountInfoComponent self)
         {
-            self.token = default;
-            self.accountId = 0;
+            self.Token = default;
+            self.AccountId = 0;
         }
     }
 }
