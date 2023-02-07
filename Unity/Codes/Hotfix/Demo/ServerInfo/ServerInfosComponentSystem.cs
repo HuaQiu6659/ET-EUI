@@ -26,11 +26,7 @@ namespace ET
     {
         public override void Awake(ServerInfosComponent self)
         {
-            self.serverInfos.RemoveAll(info => info is null);
-            foreach (var info in self.serverInfos)
-                info.Dispose();
-
-            self.serverInfos.Clear();
+            self.serverInfos.ClearEntityList();
         }
     }
 
@@ -39,11 +35,7 @@ namespace ET
     {
         public override void Destroy(ServerInfosComponent self)
         {
-            self.serverInfos.RemoveAll(info => info is null);
-            foreach (var info in self.serverInfos)
-                info.Dispose();
-
-            self.serverInfos.Clear();
+            self.serverInfos.ClearEntityList();
         }
     }
 }

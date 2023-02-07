@@ -570,6 +570,33 @@ namespace ET
 
 	}
 
+	[Message(OuterOpcode.RoleInfoProto)]
+	[ProtoContract]
+	public partial class RoleInfoProto: Object
+	{
+		[ProtoMember(1)]
+		public long Id { get; set; }
+
+		[ProtoMember(2)]
+		public string Name { get; set; }
+
+		[ProtoMember(3)]
+		public int Status { get; set; }
+
+		[ProtoMember(4)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(5)]
+		public long LastLoginTime { get; set; }
+
+		[ProtoMember(6)]
+		public long CreateTime { get; set; }
+
+		[ProtoMember(7)]
+		public int ServerId { get; set; }
+
+	}
+
 	[Message(OuterOpcode.A2C_GetServerInfoResponse)]
 	[ProtoContract]
 	public partial class A2C_GetServerInfoResponse: Object, IResponse
@@ -585,6 +612,46 @@ namespace ET
 
 		[ProtoMember(1)]
 		public List<ServerInfoProto> ServerInfos = new List<ServerInfoProto>();
+
+	}
+
+	[ResponseType(nameof(A2C_CreateRoleResponse))]
+	[Message(OuterOpcode.C2A_CreateRoleRequest)]
+	[ProtoContract]
+	public partial class C2A_CreateRoleRequest: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Token { get; set; }
+
+		[ProtoMember(2)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(3)]
+		public string RoleName { get; set; }
+
+		[ProtoMember(4)]
+		public int ServerId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_CreateRoleResponse)]
+	[ProtoContract]
+	public partial class A2C_CreateRoleResponse: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public RoleInfoProto RoleInfo { get; set; }
 
 	}
 

@@ -3,6 +3,8 @@ using System;
 
 namespace ET
 {
+    [FriendClass(typeof(ServerInfosComponent)),
+        FriendClass(typeof(RoleInfosComponent))]
     public static class LoginHelper
     {
         public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
@@ -69,5 +71,42 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
     
+        public static async ETTask<int> CreateRole(Scene zoneScene, string roleName)
+        {
+            A2C_CreateRoleResponse response = null;
+
+            try
+            {
+                AccountInfoComponent accountInfoComponent = zoneScene.GetComponent<AccountInfoComponent>();
+                response = (A2C_CreateRoleResponse)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_CreateRoleRequest()
+                {
+                    RoleName = roleName,
+                    AccountId = accountInfoComponent.AccountId,
+                    Token = accountInfoComponent.Token,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().currentServerId
+                });
+
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return ErrorCode.ERR_NetworkError;
+            }
+
+            //创建失败
+            if (response.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(response.Error.ToString());
+                return response.Error;
+            }
+
+            //存入列表
+            var roleInfosCmp = zoneScene.GetComponent<RoleInfosComponent>();
+            RoleInfo newRole = roleInfosCmp.AddChild<RoleInfo>();
+            newRole.FromMessage(response.RoleInfo);
+            roleInfosCmp.roles.Add(newRole);
+
+            return ErrorCode.ERR_Success;
+        }
     }
 }

@@ -11,10 +11,7 @@ namespace ET
 
 		public static void RegisterUIEvent(this DlgLobby self)
 		{
-		  self.View.E_EnterMapButton.AddListener(()=>
-		  {
-			  self.OnEnterMapClickHandler().Coroutine();
-		  });
+		  self.View.E_EnterMapButton.AddListener(self.OnEnterMapClickHandler().Coroutine);
 		
 		}
 

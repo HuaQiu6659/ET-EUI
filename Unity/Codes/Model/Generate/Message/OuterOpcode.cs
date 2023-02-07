@@ -37,6 +37,9 @@ namespace ET
 		 public const ushort A2C_Disconnect = 10034;
 		 public const ushort ServerInfoProto = 10035;
 		 public const ushort C2A_GetServerInfoRequest = 10036;
-		 public const ushort A2C_GetServerInfoResponse = 10037;
+		 public const ushort RoleInfoProto = 10037;
+		 public const ushort A2C_GetServerInfoResponse = 10038;
+		 public const ushort C2A_CreateRoleRequest = 10039;
+		 public const ushort A2C_CreateRoleResponse = 10040;
 	}
 }

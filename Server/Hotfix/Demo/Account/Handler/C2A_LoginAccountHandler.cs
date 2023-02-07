@@ -104,17 +104,17 @@ namespace ET
                         return;
                     }
 
-
-
-
                     AccountSessionsComponent ASC = session.DomainScene().GetComponent<AccountSessionsComponent>();
                     //判断账号是否在线
                     if (ASC.Get(account.Id, out long sessionInstanceId))
                     {
                         //账号在线，将其踢下线
                         Session otherSession = Game.EventSystem.Get(sessionInstanceId) as Session;
-                        otherSession.Send(new A2C_Disconnect() { Error = ErrorCode.ERR_LoginElsewhere });
-                        otherSession.Disconnect().Coroutine();
+                        if (otherSession != null)
+                        {
+                            otherSession.Send(new A2C_Disconnect() { Error = ErrorCode.ERR_LoginElsewhere });
+                            otherSession.Disconnect().Coroutine();
+                        }
                     }
                     ASC.AddOrSet(account.Id, session.InstanceId);
                     //登录后10分钟后若无操作将被踢下线（避免客户端断联后服务端不知道）

@@ -6,5 +6,7 @@ namespace ET
     public class ServerInfosComponent : Entity, IAwake, IDestroy
     {
         public List<ServerInfo> serverInfos = new List<ServerInfo>();
+
+        public int currentServerId = 0;
     }
 }

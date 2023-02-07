@@ -20,6 +20,9 @@ namespace ET
         public const int ERR_LoginElsewhere         = 200003;   //在其他地方登录
         public const int ERR_AccountEqualPassword   = 200004;   //账号密码相同
 
+        //创建角色
+        public const int ERR_RoleExisted            = 200005;   //同区同名角色已存在
+
         //通用部分
         public const int ERR_WrongScene             = 300000;
         public const int ERR_NetworkError           = 300001;   //网络错误
@@ -27,6 +30,7 @@ namespace ET
         public const int ERR_IllegalInput           = 300003;   //非法字符串
         public const int ERR_MultipleRequest        = 300004;   //多次请求
         public const int ERR_TimeOut                = 300005;   //时间过长（无操作）
+        public const int ERR_WrongToken             = 300006;   //Token不存在或者对不上
 
     }
 }

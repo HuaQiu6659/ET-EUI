@@ -13,44 +13,64 @@ public partial class UICodeSpawner
 {
 	static public void SpawnEUICode(GameObject gameObject)
 	{
-		if (null == gameObject)
+		if (!gameObject)
 		{
 			Debug.LogError("UICode Select GameObject is null!");
 			return;
 		}
 
-		try
-		{
-			string uiName = gameObject.name;
+        string uiName = gameObject.name;
+        try
+        {
+            //TODO:生成预制体，修改assetbundle
 			if (uiName.StartsWith(UIPanelPrefix))
 			{
 				Debug.LogWarning($"----------开始生成Dlg{uiName} 相关代码 ----------");
 				SpawnDlgCode(gameObject);
 				Debug.LogWarning($"生成Dlg{uiName} 完毕!!!");
-				return;
+				SetAssetBundleName(UIPanelPrefix);
+                return;
 			}
 			else if(uiName.StartsWith(CommonUIPrefix))
 			{
 				Debug.LogWarning($"-------- 开始生成子UI: {uiName} 相关代码 -------------");
 				SpawnSubUICode(gameObject);
 				Debug.LogWarning($"生成子UI: {uiName} 完毕!!!");
-				return;
+                SetAssetBundleName(CommonUIPrefix);
+                return;
 			}
 			else if (uiName.StartsWith(UIItemPrefix))
 			{
 				Debug.LogWarning($"-------- 开始生成滚动列表项: {uiName} 相关代码 -------------");
 				SpawnLoopItemCode(gameObject);
 				Debug.LogWarning($" 开始生成滚动列表项: {uiName} 完毕！！！");
-				return;
-			}
-			Debug.LogError($"选择的预设物不属于 Dlg, 子UI，滚动列表项，请检查 {uiName}！！！！！！");
-		}
+                SetAssetBundleName(UIItemPrefix);
+                return;
+            }
+            Debug.LogError($"选择的预设物不属于 Dlg, 子UI，滚动列表项，请检查 {uiName}！！！！！！");
+        }
 		finally
 		{
 			Path2WidgetCachedDict?.Clear();
 			Path2WidgetCachedDict = null;
-		}
-	}
+        }
+
+		void SetAssetBundleName(string directory)
+        {
+            //判断GameObject为预制体或者场景物体
+            PrefabAssetType type = PrefabUtility.GetPrefabAssetType(gameObject);
+            if (type != PrefabAssetType.NotAPrefab)
+                return;
+
+            string prefabPath = $"Assets/Bundles/UI/{directory}/{uiName}";
+            PrefabUtility.SaveAsPrefabAsset(gameObject, prefabPath);
+            AssetImporter assetImporter = AssetImporter.GetAtPath(prefabPath);
+            assetImporter.assetBundleName = $"{uiName.ToLower()}.unity3d";
+            AssetDatabase.Refresh();
+            Debug.LogWarning($" 生成预制体: {uiName} 完毕！！！");
+            Object.DestroyImmediate(gameObject);
+        }
+    }
 	
 	
     static public void SpawnDlgCode(GameObject gameObject)

@@ -279,6 +279,17 @@ message C2A_GetServerInfoRequest // IRequest
 	int64 AccountId = 2;
 }
 
+message RoleInfoProto
+{
+	int64 Id = 1;
+	string Name = 2;
+	int32 Status = 3;
+	int64 AccountId = 4;
+	int64 LastLoginTime = 5;
+	int64 CreateTime = 6;
+	int32 ServerId = 7;
+}
+
 message A2C_GetServerInfoResponse // IResponse
 {
 	int32 RpcId = 90;
@@ -286,4 +297,25 @@ message A2C_GetServerInfoResponse // IResponse
 	string Message = 92;
 
 	repeated ServerInfoProto ServerInfos = 1;
+}
+
+//ResponseType A2C_CreateRoleResponse
+message C2A_CreateRoleRequest	// IRequest
+{
+	int32 RpcId = 90;
+
+	string Token = 1;
+	int64 AccountId = 2;
+
+	string RoleName = 3;
+	int32 ServerId = 4;	//所选区服
+}
+
+message A2C_CreateRoleResponse // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	RoleInfoProto RoleInfo = 1;
 }
