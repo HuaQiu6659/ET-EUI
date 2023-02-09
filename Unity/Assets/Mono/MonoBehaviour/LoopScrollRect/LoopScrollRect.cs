@@ -73,7 +73,7 @@ namespace UnityEngine.UI
             }
         }
         
-        public void AddItemRefreshListener(Action<Transform,int> scrollMoveEvent)
+        public void AddItemRefreshListener(Action<Transform, int> scrollMoveEvent)
         {
             if ( null == this.dataSource || scrollMoveEvent == null )
             {

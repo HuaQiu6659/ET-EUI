@@ -8,6 +8,7 @@ using UnityEngine;
 
 using ET;
 using NUnit.Framework;
+using UnityEngine.UI;
 
 public partial class UICodeSpawner
 {
@@ -22,18 +23,17 @@ public partial class UICodeSpawner
         string uiName = gameObject.name;
         try
         {
-            //TODO:生成预制体，修改assetbundle
 			if (uiName.StartsWith(UIPanelPrefix))
 			{
-				Debug.LogWarning($"----------开始生成Dlg{uiName} 相关代码 ----------");
+				Debug.Log($"----------开始生成Dlg{uiName} 相关代码 ----------");
 				SpawnDlgCode(gameObject);
-				Debug.LogWarning($"生成Dlg{uiName} 完毕!!!");
+				Debug.Log($"生成Dlg：{uiName} 完毕!!!");
 				SetAssetBundleName(UIPanelPrefix);
                 return;
 			}
 			else if(uiName.StartsWith(CommonUIPrefix))
 			{
-				Debug.LogWarning($"-------- 开始生成子UI: {uiName} 相关代码 -------------");
+				Debug.Log($"-------- 开始生成子UI: {uiName} 相关代码 -------------");
 				SpawnSubUICode(gameObject);
 				Debug.LogWarning($"生成子UI: {uiName} 完毕!!!");
                 SetAssetBundleName(CommonUIPrefix);
@@ -41,9 +41,10 @@ public partial class UICodeSpawner
 			}
 			else if (uiName.StartsWith(UIItemPrefix))
 			{
-				Debug.LogWarning($"-------- 开始生成滚动列表项: {uiName} 相关代码 -------------");
+				Debug.Log($"-------- 开始生成滚动列表项: {uiName} 相关代码 -------------");
 				SpawnLoopItemCode(gameObject);
-				Debug.LogWarning($" 开始生成滚动列表项: {uiName} 完毕！！！");
+				Debug.Log($" 生成滚动列表项: {uiName} 完毕！！！");
+                CheckLayoutElementExist();
                 SetAssetBundleName(UIItemPrefix);
                 return;
             }
@@ -59,16 +60,29 @@ public partial class UICodeSpawner
         {
             //判断GameObject为预制体或者场景物体
             PrefabAssetType type = PrefabUtility.GetPrefabAssetType(gameObject);
-            if (type != PrefabAssetType.NotAPrefab)
+            if (!gameObject.transform.parent)
                 return;
 
-            string prefabPath = $"Assets/Bundles/UI/{directory}/{uiName}";
+            Debug.Log($"----------开始生成 {uiName} 预制体 ----------");
+            string prefabPath = $"Assets/Bundles/UI/{directory}/{uiName}.prefab";
+
+            if (File.Exists(prefabPath))
+                Debug.LogWarning($"已存在{uiName}预制体，该预制体将会被覆盖。");
+
             PrefabUtility.SaveAsPrefabAsset(gameObject, prefabPath);
             AssetImporter assetImporter = AssetImporter.GetAtPath(prefabPath);
             assetImporter.assetBundleName = $"{uiName.ToLower()}.unity3d";
             AssetDatabase.Refresh();
-            Debug.LogWarning($" 生成预制体: {uiName} 完毕！！！");
-            Object.DestroyImmediate(gameObject);
+            Debug.Log($" 生成预制体: {uiName} 完毕！！！");
+        }
+
+        void CheckLayoutElementExist()
+        {
+            if (gameObject.TryGetComponent(out LayoutElement layout))
+                return;
+
+            layout = gameObject.AddComponent<LayoutElement>();
+            layout.preferredWidth = ((RectTransform)layout.transform).rect.width;
         }
     }
 	
@@ -205,8 +219,8 @@ public partial class UICodeSpawner
 	    strFilePath = Application.dataPath + "/../Codes/HotfixView/Demo/UI/" + strDlgName + "/Event/" + strDlgName + "EventHandler.cs";
         if(System.IO.File.Exists(strFilePath))
         {
-	        Debug.LogError("已存在 " + strDlgName + ".cs,将不会再次生成。");
-            return;
+	        Debug.LogWarning(strFilePath + "将被覆盖。");
+            File.Delete(strFilePath);
         }
         SpawnWindowIdCode(gameObject);
         StreamWriter sw = new StreamWriter(strFilePath, false, Encoding.UTF8);
@@ -291,8 +305,8 @@ public partial class UICodeSpawner
 	    strFilePath = Application.dataPath + "/../Codes/ModelView/Demo/UI/" + strDlgName  + "/" + strDlgName  + ".cs";
         if(System.IO.File.Exists(strFilePath))
         {
-	        Debug.LogError("已存在 " + strDlgName + ".cs,将不会再次生成。");
-            return;
+            Debug.LogWarning(strFilePath + "将被覆盖。");
+            File.Delete(strFilePath);
         }
 
         StreamWriter sw = new StreamWriter(strFilePath, false, Encoding.UTF8);
@@ -549,7 +563,7 @@ public partial class UICodeSpawner
 
     public static void FindAllWidgets(Transform trans, string strPath)
 	{
-		if (null == trans)
+		if (!trans)
 		{
 			return;
 		}

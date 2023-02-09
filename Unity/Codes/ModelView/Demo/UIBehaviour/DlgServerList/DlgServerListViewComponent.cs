@@ -41,15 +41,34 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.LoopVerticalScrollRect ELoopScrollList_ServerlistLoopVerticalScrollRect
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_ELoopScrollList_ServerlistLoopVerticalScrollRect == null )
+     			{
+		    		this.m_ELoopScrollList_ServerlistLoopVerticalScrollRect = UIFindHelper.FindDeepChild<UnityEngine.UI.LoopVerticalScrollRect>(this.uiTransform.gameObject,"ELoopScrollList_Serverlist");
+     			}
+     			return this.m_ELoopScrollList_ServerlistLoopVerticalScrollRect;
+     		}
+     	}
+
 		public void DestroyWidget()
 		{
 			this.m_EButton_DecidedButton = null;
 			this.m_EButton_DecidedImage = null;
+			this.m_ELoopScrollList_ServerlistLoopVerticalScrollRect = null;
 			this.uiTransform = null;
 		}
 
 		private UnityEngine.UI.Button m_EButton_DecidedButton = null;
 		private UnityEngine.UI.Image m_EButton_DecidedImage = null;
+		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopScrollList_ServerlistLoopVerticalScrollRect = null;
 		public Transform uiTransform = null;
 	}
 }

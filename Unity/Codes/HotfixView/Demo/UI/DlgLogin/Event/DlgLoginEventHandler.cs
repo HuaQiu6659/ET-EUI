@@ -8,7 +8,7 @@
 
 		public void OnInitWindowCoreData(UIBaseWindow uiBaseWindow)
 		{
-		  uiBaseWindow.WindowData.windowType = UIWindowType.PopUp; 
+		  uiBaseWindow.WindowData.windowType = UIWindowType.Normal; 
 		}
 
 		public void OnInitComponent(UIBaseWindow uiBaseWindow)
@@ -29,7 +29,6 @@
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)
 		{
-			uiBaseWindow.GetComponent<DlgLogin>().HideWindow(); 
 		}
 
 		public void BeforeUnload(UIBaseWindow uiBaseWindow)

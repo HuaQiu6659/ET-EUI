@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ET
 {
-	public static  class DlgLoginSystem
+	public static class DlgLoginSystem
 	{
 		public static void RegisterUIEvent(this DlgLogin self)
 		{
@@ -15,13 +15,7 @@ namespace ET
 			self.View.E_AccountInputField.onValueChanged.AddListener(input => self.View.E_PasswordInputField.text = string.Empty);
 		}
 
-		public static void ShowWindow(this DlgLogin self, Entity contextData = null)
-		{
-#if UNITY_EDITOR
-			self.View.E_AccountInputField.text = UnityEditor.EditorPrefs.GetString("Account", "TestAccount");
-			self.View.E_PasswordInputField.text = UnityEditor.EditorPrefs.GetString("Password", "TestPassword");
-#endif
-        }
+		public static void ShowWindow(this DlgLogin self, Entity contextData = null) { }
 		
 		public static async ETTask OnLoginClickHandler(this DlgLogin self)
 		{
@@ -49,10 +43,13 @@ namespace ET
 #if UNITY_EDITOR
 				UnityEditor.EditorPrefs.SetString("Account", account);
 				UnityEditor.EditorPrefs.SetString("Password", password);
+#else
+				PlayerPrefs.SetString("Account", account);
+				PlayerPrefs.SetString("Password", password);
 #endif
 
-			}
-			catch (Exception e)
+            }
+            catch (Exception e)
 			{
 				Log.Error(e.Message);
 			}
@@ -64,4 +61,18 @@ namespace ET
 		}
 		
 	}
+
+	public class DlgLoginAwakeSystem : AwakeSystem<DlgLogin>
+	{
+		public override void Awake(DlgLogin self)
+        {
+#if UNITY_EDITOR
+            self.View.E_AccountInputField.text = UnityEditor.EditorPrefs.GetString("Account", "TestAccount");
+            self.View.E_PasswordInputField.text = UnityEditor.EditorPrefs.GetString("Password", "TestPassword");
+#else
+            self.View.E_AccountInputField.text = PlayerPrefs.GetString("Account", "TestAccount");
+            self.View.E_PasswordInputField.text = PlayerPrefs.GetString("Password", "TestPassword");
+#endif
+        }
+    }
 }

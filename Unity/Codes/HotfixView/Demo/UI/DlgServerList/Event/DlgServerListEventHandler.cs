@@ -8,7 +8,7 @@
 
 		public void OnInitWindowCoreData(UIBaseWindow uiBaseWindow)
 		{
-		  uiBaseWindow.WindowData.windowType = UIWindowType.Normal; 
+		  uiBaseWindow.WindowData.windowType = UIWindowType.Normal;
 		}
 
 		public void OnInitComponent(UIBaseWindow uiBaseWindow)
@@ -29,6 +29,7 @@
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)
 		{
+			uiBaseWindow.GetComponent<DlgServerList>().HideWindow();
 		}
 
 		public void BeforeUnload(UIBaseWindow uiBaseWindow)
