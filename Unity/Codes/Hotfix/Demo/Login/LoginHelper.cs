@@ -43,8 +43,8 @@ namespace ET
                 accountSession?.Dispose();
                 return errorCode;
             }
-        } 
-    
+        }
+
         public static async ETTask<int> GetServerInfos(Scene zoneScene)
         {
             A2C_GetServerInfoResponse response = null;
@@ -70,7 +70,7 @@ namespace ET
 
             return ErrorCode.ERR_Success;
         }
-    
+
         public static async ETTask<int> CreateRole(Scene zoneScene, string roleName)
         {
             A2C_CreateRoleResponse response = null;
@@ -105,6 +105,38 @@ namespace ET
             RoleInfo newRole = roleInfosCmp.AddChild<RoleInfo>();
             newRole.FromMessage(response.RoleInfo);
             roleInfosCmp.roles.Add(newRole);
+
+            return ErrorCode.ERR_Success;
+        }
+
+        public static async ETTask<int> DeleteRole(Scene zoneScene, string roleName)
+        {
+            var session = zoneScene.GetComponent<SessionComponent>().Session;
+            var accountInfo = zoneScene.GetComponent<AccountInfoComponent>();
+
+            A2C_DeleteRoleResponse response = null;
+
+            try
+            {
+                response = (A2C_DeleteRoleResponse)await session.Call(new C2A_CreateRoleRequest()
+                {
+                    AccountId = accountInfo.AccountId,
+                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().currentServerId,
+                    RoleName = roleName,
+                    Token = accountInfo.Token
+                }) ;
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return ErrorCode.ERR_NetworkError;
+            }
+
+            if (response.Error != ErrorCode.ERR_Success)
+            {
+                Log.Error(response.Error.ToString());
+                return response.Error;
+            }
 
             return ErrorCode.ERR_Success;
         }

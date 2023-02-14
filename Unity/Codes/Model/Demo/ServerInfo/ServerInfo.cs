@@ -9,7 +9,6 @@ namespace ET
     {
         public ServerStatus status;
         public string serverName;
-
     }
 
     public enum ServerStatus

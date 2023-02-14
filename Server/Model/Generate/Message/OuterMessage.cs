@@ -655,4 +655,78 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(C2A_GetRolesRequest))]
+	[Message(OuterOpcode.C2A_GetRolesRequest)]
+	[ProtoContract]
+	public partial class C2A_GetRolesRequest: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Token { get; set; }
+
+		[ProtoMember(2)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(3)]
+		public int ServerId { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_GetRolesResponse)]
+	[ProtoContract]
+	public partial class A2C_GetRolesResponse: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public List<RoleInfoProto> Roles = new List<RoleInfoProto>();
+
+	}
+
+	[ResponseType(nameof(A2C_DeleteRoleResponse))]
+	[Message(OuterOpcode.C2A_DeleteRoleRequest)]
+	[ProtoContract]
+	public partial class C2A_DeleteRoleRequest: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Token { get; set; }
+
+		[ProtoMember(2)]
+		public string AccountId { get; set; }
+
+		[ProtoMember(3)]
+		public int ServerId { get; set; }
+
+		[ProtoMember(4)]
+		public string roleName { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_DeleteRoleResponse)]
+	[ProtoContract]
+	public partial class A2C_DeleteRoleResponse: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
 }

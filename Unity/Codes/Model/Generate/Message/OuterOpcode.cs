@@ -41,5 +41,9 @@ namespace ET
 		 public const ushort A2C_GetServerInfoResponse = 10038;
 		 public const ushort C2A_CreateRoleRequest = 10039;
 		 public const ushort A2C_CreateRoleResponse = 10040;
+		 public const ushort C2A_GetRolesRequest = 10041;
+		 public const ushort A2C_GetRolesResponse = 10042;
+		 public const ushort C2A_DeleteRoleRequest = 10043;
+		 public const ushort A2C_DeleteRoleResponse = 10044;
 	}
 }

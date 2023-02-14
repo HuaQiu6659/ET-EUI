@@ -6,6 +6,7 @@ namespace ET
     public class RoleInfosComponent : Entity, IAwake, IDestroy
     {
         public List<RoleInfo> roles = new List<RoleInfo>();
-        public long currentRoleId = 0;
+        public int currentRoleId = 0;
+        public const int UnSelectId = -1;
     }
 }
