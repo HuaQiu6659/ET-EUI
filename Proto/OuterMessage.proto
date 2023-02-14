@@ -319,3 +319,40 @@ message A2C_CreateRoleResponse // IResponse
 
 	RoleInfoProto RoleInfo = 1;
 }
+
+//ResponseType C2A_GetRolesRequest
+message C2A_GetRolesRequest	// IRequest
+{
+	int32 RpcId = 90;
+
+	string Token = 1;
+	int64 AccountId = 2;
+	int32 ServerId = 3;	//所选区服
+}
+
+message A2C_GetRolesResponse // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	repeated RoleInfoProto Roles = 1; //角色列表
+}
+
+//ResponseType A2C_DeleteRoleResponse
+message C2A_DeleteRoleRequest // IRequest
+{
+	int32 RpcId = 90;
+
+	string Token = 1;
+	string AccountId = 2;
+	int32 ServerId = 3;
+	string roleName = 4;
+}
+
+message A2C_DeleteRoleResponse // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
