@@ -4,7 +4,7 @@
     [FriendClassAttribute(typeof(ET.RoleInfo))]
     public static class RoleInfosComponentSysten
     {
-        public static void ClearRoles(this RoleInfosComponent self) => self.roles.Clear();
+        public static void ClearRoles(this RoleInfosComponent self) => self.roles.ClearEntityList();
 
         public static bool GetCurrentRole(this RoleInfosComponent self, out RoleInfo role)
         {

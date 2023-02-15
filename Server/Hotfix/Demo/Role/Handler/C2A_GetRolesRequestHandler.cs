@@ -25,7 +25,7 @@ namespace ET.Demo.Role.Handler
             using (session.AddComponent<SessionLoginComponent>())
             {
                 var db = DBManagerComponent.Instance;
-                var roleList = await db.GetZoneDB(session.DomainZone()).Query<RoleInfo>(info => info.accountId == request.AccountId && info.serverId == request.ServerId);
+                var roleList = await db.GetZoneDB(session.DomainZone()).Query<RoleInfo>(info => info.accountId == request.AccountId && info.serverId == request.ServerId && info.status == RoleStatus.Normal);
                 if (roleList?.Count > 0)
                 {
                     foreach (var role in roleList)
@@ -43,17 +43,8 @@ namespace ET.Demo.Role.Handler
             {
                 response.Error = errorCode;
                 reply();
-                session.Disconnect().Coroutine();
+                session?.Disconnect().Coroutine();
             }
-        }
-    }
-
-    public class C2A_DeleteRoleRequestHandler : AMRpcHandler<C2A_DeleteRoleRequest, A2C_DeleteRoleResponse>
-    {
-        protected override async ETTask Run(Session session, C2A_DeleteRoleRequest request, A2C_DeleteRoleResponse response, Action reply)
-        {
-
-            await ETTask.CompletedTask;
         }
     }
 }

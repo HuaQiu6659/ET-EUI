@@ -9,5 +9,6 @@
         // 不能超过10000
 
         public const int AccountCheckOutTime = 1004;    //账号长时间无操作
+        public const int PlayerOfflineOutTime = 1005;   //长时间无操作
     }
 }

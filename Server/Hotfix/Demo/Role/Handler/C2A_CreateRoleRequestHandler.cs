@@ -78,7 +78,7 @@ namespace ET.Demo.Role.Handler
             {
                 response.Error = errorCode;
                 reply();
-                session.Disconnect().Coroutine();
+                session?.Disconnect().Coroutine();
             }
         }
     }

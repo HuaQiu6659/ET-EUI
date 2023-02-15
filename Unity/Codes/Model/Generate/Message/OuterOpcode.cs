@@ -45,5 +45,13 @@ namespace ET
 		 public const ushort A2C_GetRolesResponse = 10042;
 		 public const ushort C2A_DeleteRoleRequest = 10043;
 		 public const ushort A2C_DeleteRoleResponse = 10044;
+		 public const ushort C2A_GetRealmKeyRequest = 10045;
+		 public const ushort A2C_GetRealmKeyResponse = 10046;
+		 public const ushort C2R_LoginRealmRequest = 10047;
+		 public const ushort R2C_LoginRealmResponse = 10048;
+		 public const ushort C2G_LoginGameGateRequest = 10049;
+		 public const ushort G2C_LoginGameGateResponse = 10050;
+		 public const ushort C2G_EnterGameRequest = 10051;
+		 public const ushort G2C_EnterGameResponse = 10052;
 	}
 }

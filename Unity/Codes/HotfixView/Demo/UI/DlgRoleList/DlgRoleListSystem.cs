@@ -20,6 +20,7 @@ namespace ET
             self.View.EInputField_NameInputInputField.onValueChanged.AddListener(name=> self.View.EButton_CreateRoleButton.interactable = name.Length >= 2);
             self.View.EButton_CreateRoleButton.AddListener(self.OnCreateRoleButtonClick);
             self.View.EButton_DeleteRoleButton.AddListener(self.OnDeleteRoleButtonClick);
+            self.View.EButton_StartGameButton.AddListener(self.OnStartGameButtonClick);
         }
 
         public static async void ShowWindow(this DlgRoleList self, Entity contextData = null)
@@ -27,47 +28,14 @@ namespace ET
             self.View.EButton_CreateRoleButton.interactable = self.View.EButton_DeleteRoleButton.interactable = self.View.EButton_StartGameButton.interactable = false;
             self.View.EInputField_NameInputInputField.text = string.Empty;
 
-            var domainScene = self.DomainScene();
-            //请求角色列表
-            var session = domainScene.GetComponent<SessionComponent>().Session;
-            var accountInfo = domainScene.GetComponent<AccountInfoComponent>();
-            var serverInfos = domainScene.GetComponent<ServerInfosComponent>();
-
-            A2C_GetRolesResponse response = null;
-            try
-            {
-                response = (A2C_GetRolesResponse)await session.Call(new C2A_GetRolesRequest() 
-                { 
-                    AccountId = accountInfo.AccountId, 
-                    ServerId = serverInfos.currentServerId, 
-                    Token = accountInfo.Token 
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Error(e.Message);
-            }
-
-            if (response.Error != ErrorCode.ERR_Success)
-            {
-                Log.Error(response.Error.ToString());
+            var zoneScene = self.ZoneScene();
+            int result = await LoginHelper.GetRoles(zoneScene);
+            if (result != ErrorCode.ERR_Success)
                 return;
-            }
 
-            var rolesCmp = self.DomainScene().GetComponent<RoleInfosComponent>();
-            rolesCmp.ClearRoles();
-            if (response.Roles?.Count > 0)
-            {
-                foreach (var proto in response.Roles)
-                {
-                    var newRole = new RoleInfo();
-                    newRole.FromMessage(proto);
-                    rolesCmp.roles.Add(newRole);
-                }
-
-                self.AddUIScrollItems(ref self.rolesToggleDict, response.Roles.Count);
-                self.View.ELoopScrollList_RolesLoopHorizontalScrollRect.SetVisible(true, response.Roles.Count);
-            }
+            var roles = zoneScene.GetComponent<RoleInfosComponent>().roles;
+            self.AddUIScrollItems(ref self.rolesToggleDict, roles.Count);
+            self.View.ELoopScrollList_RolesLoopHorizontalScrollRect.SetVisible(true, roles.Count);
         }
 
         public static void HideWindow(this DlgRoleList self)
@@ -133,9 +101,20 @@ namespace ET
             if (result != ErrorCode.ERR_Success)
                 return;
 
-            self.ZoneScene().GetComponent<RoleInfosComponent>().RemoveRole(role.name);
             self.View.ELoopScrollList_RolesLoopHorizontalScrollRect.totalCount -= 1;
             self.View.ELoopScrollList_RolesLoopHorizontalScrollRect.RefreshCells();
+        }
+
+        static async void OnStartGameButtonClick(this DlgRoleList self)
+        {
+            Scene zoneScene = self.ZoneScene();
+            int result = await LoginHelper.GetRealmKey(zoneScene);
+            if (result != ErrorCode.ERR_Success)
+                return;
+
+            result = await LoginHelper.EnterGame(zoneScene);
+            if (result != ErrorCode.ERR_Success)
+                return;
         }
     }
 

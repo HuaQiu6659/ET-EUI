@@ -34,8 +34,8 @@ namespace ET
             self.AddUIScrollItems(ref self.serverToggleDict, serverInfosCmp.serverInfos.Count);
             self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.SetVisible(true, serverInfosCmp.serverInfos.Count);
 
-			//显示窗口时重置已选择的服务器编号
-			self.ZoneScene().GetComponent<ServerInfosComponent>().currentServerId = ServerInfosComponent.UnSelectId;
+            //显示窗口时重置已选择的服务器编号
+            zoneScene.GetComponent<ServerInfosComponent>().currentServerId = ServerInfosComponent.UnSelectId;
 			self.View.ELabel_SelectServerText.text = string.Empty;
 			//self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.RefreshCells();
         }

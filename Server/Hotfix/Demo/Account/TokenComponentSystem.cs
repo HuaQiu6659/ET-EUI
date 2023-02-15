@@ -64,7 +64,7 @@ namespace ET
             }
 
             session.Send(new A2C_Disconnect() { Error = reason });
-            session.Disconnect().Coroutine();
+            session?.Disconnect().Coroutine();
         }
     }
 

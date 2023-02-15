@@ -22,6 +22,7 @@ namespace ET
 
         //创建角色
         public const int ERR_RoleExisted            = 200005;   //同区同名角色已存在
+        public const int ERR_RoleUnexisted          = 200006;   //删除角色时角色不存在
 
         //通用部分
         public const int ERR_WrongScene             = 300000;

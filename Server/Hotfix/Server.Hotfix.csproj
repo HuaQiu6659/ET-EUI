@@ -19,6 +19,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\Unity\Codes\Hotfix\Demo\EntityHelper.cs" Link="Demo\EntityHelper.cs" />
     <Compile Include="..\..\Unity\Codes\Hotfix\Demo\Move\MoveComponentSystem.cs">
       <Link>Demo\Move\MoveComponentSystem.cs</Link>
     </Compile>

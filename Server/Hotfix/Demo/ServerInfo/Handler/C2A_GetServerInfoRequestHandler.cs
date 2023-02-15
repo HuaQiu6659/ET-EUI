@@ -38,7 +38,7 @@ namespace ET
             {
                 response.Error = errorCode;
                 reply();
-                session.Disconnect().Coroutine();
+                session?.Disconnect().Coroutine();
             }
         }
     }

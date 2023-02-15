@@ -345,9 +345,9 @@ message C2A_DeleteRoleRequest // IRequest
 	int32 RpcId = 90;
 
 	string Token = 1;
-	string AccountId = 2;
+	int64 AccountId = 2;
 	int32 ServerId = 3;
-	string roleName = 4;
+	string RoleName = 4;
 }
 
 message A2C_DeleteRoleResponse // IResponse
@@ -355,4 +355,78 @@ message A2C_DeleteRoleResponse // IResponse
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
+}
+
+//ResponseType A2C_GetRealmKeyResponse
+message C2A_GetRealmKeyRequest // IRequest
+{
+	int32 RpcId = 90;
+
+	string Token = 1;
+	int64 AccountId = 2;
+	int32 ServerId = 3;
+}
+
+message A2C_GetRealmKeyResponse // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	string RealmKey = 1;
+	string RealmAddress = 2;
+}
+
+//ResponseType R2C_LoginRealmResponse
+message C2R_LoginRealmRequest //IRequest
+{
+	int32 RpcId = 90;
+
+	int64 AccountId = 1;
+	string RealmKey = 2;
+}
+
+message R2C_LoginRealmResponse //IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	string GateSessionKey = 1;
+	string GateAddress = 2;
+}
+
+//ResponseType G2C_LoginGameGateResponse
+message C2G_LoginGameGateRequest // IRequest
+{
+	int32 RpcId = 90;
+
+	string Key = 1;
+	int64 RoleId = 2;
+	int64 AccountId = 3;
+}
+
+message G2C_LoginGameGateResponse // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	int64 PlayerId = 1;
+}
+
+//ResponseType G2C_EnterGameResponse
+message C2G_EnterGameRequest // IRequest
+{
+	int32 RpcId = 90;
+}
+
+message G2C_EnterGameResponse // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	//自己的ID
+	int64 UnitId = 1;
 }
