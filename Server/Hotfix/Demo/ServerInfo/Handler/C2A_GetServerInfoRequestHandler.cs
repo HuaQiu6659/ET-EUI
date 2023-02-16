@@ -21,7 +21,7 @@ namespace ET
 
             var sessionDomainScene = session.DomainScene();
             //Token不存在  或者  对不上
-            if (!sessionDomainScene.GetComponent<TokenComponent>().Get(request.AccountId, out string token) || !token.Equals(request.Token))
+            if (!sessionDomainScene.GetComponent<TokensComponent>().Get(request.AccountId, out string token) || !token.Equals(request.Token))
             {
                 RequestError(ErrorCode.ERR_WrongToken);
                 return;

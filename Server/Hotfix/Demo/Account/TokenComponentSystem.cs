@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ET
 {
-    [FriendClass(typeof(TokenComponent))]
+    [FriendClass(typeof(TokensComponent))]
     public static class TokenComponentSystem
     {
-        public static void AddOrSet(this TokenComponent self, long id, string token)
+        public static void AddOrSet(this TokensComponent self, long id, string token)
         {
             if (self.tokens.ContainsKey(id))
                 self.tokens[id] = token;
@@ -25,7 +25,7 @@ namespace ET
         /// <param name="id">目标ID</param>
         /// <param name="token">所得到的令牌</param>
         /// <returns>是否获取成功</returns>
-        public static bool Get(this TokenComponent self, long id, out string token)
+        public static bool Get(this TokensComponent self, long id, out string token)
         {
             if (self.tokens.TryGetValue(id, out token))
                 return true;
@@ -33,12 +33,12 @@ namespace ET
             return false;
         }
 
-        public static void Remove(this TokenComponent self, long id)
+        public static void Remove(this TokensComponent self, long id)
         {
             self.tokens.Remove(id);
         }
 
-        public static async ETTask TimeOutRemoveToken(this TokenComponent self, long id, string token)
+        public static async ETTask TimeOutRemoveToken(this TokensComponent self, long id, string token)
         {
             await TimerComponent.Instance.WaitAsync(600000);    //等待十分钟
 

@@ -16,13 +16,13 @@ namespace ET.Demo.Role.Handler
             }
 
             //避免短时间多次相同请求
-            if (session.GetComponent<SessionLoginComponent>() != null)
+            if (session.GetComponent<SessionLockingComponent>() != null)
             {
                 RequestError(ErrorCode.ERR_MultipleRequest);
                 return;
             }
 
-            using (session.AddComponent<SessionLoginComponent>())
+            using (session.AddComponent<SessionLockingComponent>())
             {
                 var db = DBManagerComponent.Instance;
                 var roleList = await db.GetZoneDB(session.DomainZone()).Query<RoleInfo>(info => info.accountId == request.AccountId && info.serverId == request.ServerId && info.status == RoleStatus.Normal);

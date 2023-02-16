@@ -3,20 +3,21 @@
 namespace ET
 {
     [FriendClassAttribute(typeof(ET.SessionPlayerComponent))]
+    [FriendClassAttribute(typeof(ET.SessionStateComponent))]
     public class C2G_LoginGameGateRequestHandler : AMRpcHandler<C2G_LoginGameGateRequest, G2C_LoginGameGateResponse>
     {
         protected override async ETTask Run(Session session, C2G_LoginGameGateRequest request, G2C_LoginGameGateResponse response, Action reply)
         {
             var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Account)
+            if (currentScene != SceneType.Gate)
             {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{currentScene}");
+                Log.Error($"请求Scene错误，目标Scene：Gate，当前Scene：{currentScene}");
                 session.Dispose();
                 return;
             }
             session.RemoveComponent<SessionAcceptTimeoutComponent>();   //基本等于登录成功，之后要保持长时间的连接
 
-            if (session.GetComponent<SessionLoginComponent>() != null)
+            if (session.GetComponent<SessionLockingComponent>() != null)
             {
                 RequestError(ErrorCode.ERR_MultipleRequest);
                 return;
@@ -35,7 +36,7 @@ namespace ET
 
             gateSessionKeyCmp.Remove(request.AccountId);
             long instanceId = session.InstanceId;
-            using (session.AddComponent<SessionLoginComponent>())
+            using (session.AddComponent<SessionLockingComponent>())
             {
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.GateLoginLock, request.AccountId))
                 {
@@ -56,6 +57,11 @@ namespace ET
                         return;
                     }
 
+                    SessionStateComponent sessionStateCmp = session.GetComponent<SessionStateComponent>();
+                    if (sessionStateCmp is null)
+                        sessionStateCmp = session.AddComponent<SessionStateComponent>();
+                    sessionStateCmp.state = SessionState.Normal;
+
                     var playerCmp = scene.GetComponent<PlayerComponent>();
                     //Player为客户端在Gate网关进程中的映射
                     Player player = playerCmp.Get(request.AccountId);
@@ -72,9 +78,9 @@ namespace ET
                         player.RemoveComponent<PlayerOfflineOutTimeComponent>();
                     }
                     var sessionPlayerCmp = session.AddComponent<SessionPlayerComponent>();
-                    sessionPlayerCmp.PlayerId = player.Id;
                     sessionPlayerCmp.PlayerInstanceId = player.InstanceId;
                     sessionPlayerCmp.AccountId = player.Account;
+                    sessionPlayerCmp.SessionId = session.InstanceId;
                 }
                 reply();
             }

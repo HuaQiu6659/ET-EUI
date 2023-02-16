@@ -427,6 +427,6 @@ message G2C_EnterGameResponse // IResponse
 	int32 Error = 91;
 	string Message = 92;
 
-	//自己的ID
+	//Player ID
 	int64 UnitId = 1;
 }

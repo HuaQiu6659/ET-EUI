@@ -19,10 +19,13 @@ namespace ET
         public const int ERR_WrongPassword          = 200002;   //密码错误
         public const int ERR_LoginElsewhere         = 200003;   //在其他地方登录
         public const int ERR_AccountEqualPassword   = 200004;   //账号密码相同
-
-        //创建角色
         public const int ERR_RoleExisted            = 200005;   //同区同名角色已存在
         public const int ERR_RoleUnexisted          = 200006;   //删除角色时角色不存在
+        public const int ERR_SessionPlayerError     = 200007;
+        public const int ERR_SessionStateError      = 200008;
+        public const int ERR_EnterGameError         = 200009;
+        public const int ERR_ReenterGameError       = 200010;
+        public const int ERR_ReenterGameFail       = 200011;
 
         //通用部分
         public const int ERR_WrongScene             = 300000;
@@ -32,6 +35,7 @@ namespace ET
         public const int ERR_MultipleRequest        = 300004;   //多次请求
         public const int ERR_TimeOut                = 300005;   //时间过长（无操作）
         public const int ERR_WrongToken             = 300006;   //Token不存在或者对不上
+        public const int ERR_NonPlayer              = 300007;
 
     }
 }

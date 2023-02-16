@@ -33,5 +33,11 @@ namespace ET
 		 public const ushort G2R_GetLoginGateKeyResponse = 20030;
 		 public const ushort G2L_AddLoginRecordRequest = 20031;
 		 public const ushort L2G_AddLoginRecordResponse = 20032;
+		 public const ushort G2M_GetEnterGameStateRequest = 20033;
+		 public const ushort M2G_GetEnterGameStateResponse = 20034;
+		 public const ushort G2M_ExitGameRequest = 20035;
+		 public const ushort M2G_ExitGameResponse = 20036;
+		 public const ushort G2L_RemoveLoginRecordRequest = 20037;
+		 public const ushort L2G_RemoveLoginRecordResponse = 20038;
 	}
 }

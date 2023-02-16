@@ -474,4 +474,85 @@ namespace ET
 
 	}
 
+	[ResponseType(nameof(M2G_GetEnterGameStateResponse))]
+	[Message(InnerOpcode.G2M_GetEnterGameStateRequest)]
+	[ProtoContract]
+	public partial class G2M_GetEnterGameStateRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+	}
+
+	[Message(InnerOpcode.M2G_GetEnterGameStateResponse)]
+	[ProtoContract]
+	public partial class M2G_GetEnterGameStateResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[ResponseType(nameof(M2G_ExitGameResponse))]
+	[Message(InnerOpcode.G2M_ExitGameRequest)]
+	[ProtoContract]
+	public partial class G2M_ExitGameRequest: Object, IActorLocationRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+	}
+
+	[Message(InnerOpcode.M2G_ExitGameResponse)]
+	[ProtoContract]
+	public partial class M2G_ExitGameResponse: Object, IActorLocationResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+	[ResponseType(nameof(L2G_RemoveLoginRecordResponse))]
+	[Message(InnerOpcode.G2L_RemoveLoginRecordRequest)]
+	[ProtoContract]
+	public partial class G2L_RemoveLoginRecordRequest: Object, IActorRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long AccountId { get; set; }
+
+		[ProtoMember(2)]
+		public int ServerId { get; set; }
+
+	}
+
+	[Message(InnerOpcode.L2G_RemoveLoginRecordResponse)]
+	[ProtoContract]
+	public partial class L2G_RemoveLoginRecordResponse: Object, IActorResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
 }

@@ -866,7 +866,7 @@ namespace ET
 		[ProtoMember(92)]
 		public string Message { get; set; }
 
-//自己的ID
+//Player ID
 		[ProtoMember(1)]
 		public long UnitId { get; set; }
 

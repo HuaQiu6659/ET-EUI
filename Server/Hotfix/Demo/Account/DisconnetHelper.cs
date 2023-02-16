@@ -1,6 +1,6 @@
 ﻿namespace ET
 {
-    public static class DisconnetHelper
+    public static class DisconnectHelper
     {
         public static async ETTask Disconnect(this Session session)
         {
@@ -17,30 +17,38 @@
             session.Dispose();
         }
 
-        public static async ETTask KickPlayer(Player target)
+        public static async ETTask KickPlayer(Player player, bool isException = false)
         {
-            if (target?.IsDisposed ?? true)
+            if (player?.IsDisposed ?? true)
                 return;
 
-            long instanceId = target.InstanceId;
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.GateLoginLock, target.Account.GetHashCode()))
+            long instanceId = player.InstanceId;
+            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.GateLoginLock, player.Account.GetHashCode()))
             {
-                if (target.IsDisposed || instanceId != target.InstanceId)
+                if (player.IsDisposed || instanceId != player.InstanceId)
                     return;
 
-                switch (target.PlayerState)
-                {
-                    case PlayerState.Gaming:
-                        //TODO:通知客户端下线，上传数据
-                        break;
+                if (!isException)
+                    switch (player.PlayerState)
+                    {
+                        case PlayerState.Gaming:
+                            //通知游戏逻辑服下线Unit角色，并将数据上传数据库
+                            await MessageHelper.CallLocationActor(player.UnitId, new G2M_ExitGameRequest());
 
-                    default:
-                        break;
-                }
+                            long loginCenterConfigSceneId = StartSceneConfigCategory.Instance.LoginCenterConfig.InstanceId;
+                            await MessageHelper.CallActor(loginCenterConfigSceneId, new G2L_RemoveLoginRecordRequest() 
+                            { 
+                                AccountId = player.Account
+                            });
+                            break;
 
-                target.PlayerState = PlayerState.Disconnect;
-                target.DomainScene().GetComponent<PlayerComponent>()?.Remove(target.Account);
-                target?.Dispose();
+                        default:
+                            break;
+                    }
+
+                player.PlayerState = PlayerState.Disconnect;
+                player.DomainScene().GetComponent<PlayerComponent>()?.Remove(player.Account);
+                player?.Dispose();
                 await TimerComponent.Instance.WaitAsync(300);   //保证一些组件的异步方法完成
             }  
         }

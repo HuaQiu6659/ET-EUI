@@ -8,14 +8,15 @@ namespace ET
         {
             if (scene.SceneType != SceneType.Realm)
             {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{scene.SceneType}");
+                Log.Error($"请求Scene错误，目标Scene：Realm，当前Scene：{scene.SceneType}");
                 response.Error = ErrorCode.ERR_WrongScene;
                 reply();
                 return;
             }
 
             string key = TimeHelper.ServerNow().ToString() + RandomHelper.RandInt64().ToString();
-            scene.GetComponent<TokenComponent>().AddOrSet(request.AccountId, key);
+            var tokensCmp = scene.GetComponent<TokensComponent>();
+            tokensCmp.AddOrSet(request.AccountId, key);
             response.RealmKey = key;
             reply();
             await ETTask.CompletedTask;

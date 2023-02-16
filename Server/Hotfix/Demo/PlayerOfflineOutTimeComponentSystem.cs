@@ -20,7 +20,7 @@
     {
         public static void KickPlayer(this PlayerOfflineOutTimeComponent self)
         {
-            DisconnetHelper.KickPlayer(self.GetParent<Player>()).Coroutine();
+            DisconnectHelper.KickPlayer(self.GetParent<Player>()).Coroutine();
         }
     }
 

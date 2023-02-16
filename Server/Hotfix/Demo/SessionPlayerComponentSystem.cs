@@ -9,10 +9,17 @@ namespace ET
 		{
 			public override void Destroy(SessionPlayerComponent self)
 			{
-				// 发送断线消息
-				ActorLocationSenderComponent.Instance.Send(self.PlayerId, new G2M_SessionDisconnect());
-				self.Domain.GetComponent<PlayerComponent>()?.Remove(self.AccountId);
-			}
+                //判断是为顶号登录还是主动断开
+
+                //主动断开：DisconnectHelper.KickPlayer()
+                var player = Game.EventSystem.Get(self.PlayerInstanceId) as Player;
+
+                //若是顶号登录，Player的SessionInstanceId会发生变化
+                if (player != null && player.SessionInstanceId == self.SessionId)
+                    DisconnectHelper.KickPlayer(player).Coroutine();
+
+                //顶号登录：不执行DisconnectHelper.KickPlayer()，直接将Map中的Unit继承给新的登录
+            }
 		}
 
 		public static Player GetMyPlayer(this SessionPlayerComponent self)

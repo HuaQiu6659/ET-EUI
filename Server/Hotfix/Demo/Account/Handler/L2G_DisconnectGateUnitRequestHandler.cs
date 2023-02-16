@@ -11,23 +11,23 @@ namespace ET
             {
                 //检测该账号是否在Gate中
                 var playerCmp = scene.GetComponent<PlayerComponent>();
-                Player gateUnit = playerCmp.Get(accountId);
-                if (gateUnit is null)   //不在
+                Player player = playerCmp.Get(accountId);
+                if (player is null)   //不在
                 {
                     reply();
                     return;
                 }
 
                 scene.GetComponent<GateSessionKeyComponent>().Remove(accountId);
-                Session gateSession = Game.EventSystem.Get(gateUnit.SessionInstanceId) as Session;
-                if (gateSession?.IsDisposed ?? true) 
+                Session gateSession = Game.EventSystem.Get(player.SessionInstanceId) as Session;
+                if ((!gateSession?.IsDisposed) ?? false) 
                 {
                     //踢下线
                     gateSession.Send(new A2C_Disconnect() { Error = ErrorCode.ERR_LoginElsewhere });
                     gateSession?.Disconnect().Coroutine();
                 }
-                gateUnit.SessionInstanceId = 0;
-                gateUnit.AddComponent<PlayerOfflineOutTimeComponent>();
+                player.SessionInstanceId = 0;
+                player.AddComponent<PlayerOfflineOutTimeComponent>();
             }
             reply();
 

@@ -7,7 +7,7 @@ namespace ET
         protected override async ETTask Run(Scene scene, A2L_LoginAccountRequest request, L2A_LoginAccountResponse response, Action reply)
         {
             long accountId = request.AccountId;
-            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginCenterLocker, accountId.GetHashCode()))
+            using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginCenterLocker, accountId))
             {
                 //无登录信息，直接返回
                 var loginInfoRecordCmp = scene.GetComponent<LoginInfoRecordComponent>();

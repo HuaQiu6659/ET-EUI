@@ -74,7 +74,7 @@ namespace ET
                     return;
                 }
 
-				infosManager.currentServerId = index;
+				infosManager.currentServerId = index + 1;	//区号比编号大1
                 self.View.EButton_DecidedButton.interactable = true;
                 selectedLabel.text = info.serverName;
             });

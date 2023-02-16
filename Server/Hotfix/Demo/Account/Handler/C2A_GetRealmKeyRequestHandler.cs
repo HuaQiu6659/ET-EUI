@@ -17,19 +17,19 @@ namespace ET
             //判定Token
             var sessionDomainScene = session.DomainScene();
             //Token不存在  或者  对不上
-            if (!sessionDomainScene.GetComponent<TokenComponent>().Get(request.AccountId, out string token) || !token.Equals(request.Token))
+            if (!sessionDomainScene.GetComponent<TokensComponent>().Get(request.AccountId, out string token) || !token.Equals(request.Token))
             {
                 RequestError(ErrorCode.ERR_WrongToken);
                 return;
             }
 
-            if (session.GetComponent<SessionLoginComponent>() != null)
+            if (session.GetComponent<SessionLockingComponent>() != null)
             {
                 RequestError(ErrorCode.ERR_MultipleRequest);
                 return;
             }
 
-            using (session.AddComponent<SessionLoginComponent>())
+            using (session.AddComponent<SessionLockingComponent>())
             {
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginOrRegiste, request.AccountId))
                 {

@@ -18,20 +18,20 @@ namespace ET.Demo.Role.Handler
             //判定Token
             var sessionDomainScene = session.DomainScene();
             //Token不存在  或者  对不上
-            if (!sessionDomainScene.GetComponent<TokenComponent>().Get(request.AccountId, out string token) || !token.Equals(request.Token))
+            if (!sessionDomainScene.GetComponent<TokensComponent>().Get(request.AccountId, out string token) || !token.Equals(request.Token))
             {
                 RequestError(ErrorCode.ERR_WrongToken);
                 return;
             }
 
-            if (session.GetComponent<SessionLoginComponent>() != null)
+            if (session.GetComponent<SessionLockingComponent>() != null)
             {
                 RequestError(ErrorCode.ERR_MultipleRequest);
                 return;
             }
 
             //避免同一账号多次请求
-            using (session.AddComponent<SessionLoginComponent>())
+            using (session.AddComponent<SessionLockingComponent>())
             {
                 //避免不同账号相同请求
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.DeleteRole, request.AccountId))

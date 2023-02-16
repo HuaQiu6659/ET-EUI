@@ -6,9 +6,9 @@ namespace ET
     {
         protected override async ETTask Run(Scene scene, R2G_GetLoginGateKeyRequest request, G2R_GetLoginGateKeyResponse response, Action reply)
         {
-            if (scene.SceneType != SceneType.Account)
+            if (scene.SceneType != SceneType.Gate)
             {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{scene.SceneType}");
+                Log.Error($"请求Scene错误，目标Scene：Gate，当前Scene：{scene.SceneType}");
                 response.Error = ErrorCode.ERR_WrongScene;
                 reply();
                 return;
