@@ -2,6 +2,7 @@
 
 namespace ET
 {
+    [FriendClassAttribute(typeof(ET.SessionPlayerComponent))]
     public class L2G_DisconnectGateUnitRequestHandler : AMActorRpcHandler<Scene, L2G_DisconnectGateUnitRequest, G2L_DisconnectGateUnitResponse>
     {
         protected override async ETTask Run(Scene scene, L2G_DisconnectGateUnitRequest request, G2L_DisconnectGateUnitResponse response, Action reply)
@@ -20,8 +21,12 @@ namespace ET
 
                 scene.GetComponent<GateSessionKeyComponent>().Remove(accountId);
                 Session gateSession = Game.EventSystem.Get(player.SessionInstanceId) as Session;
-                if ((!gateSession?.IsDisposed) ?? false) 
+                if ((!gateSession?.IsDisposed) ?? false)
                 {
+                    var sessionPlayerCmp = gateSession.GetComponent<SessionPlayerComponent>();
+                    if (sessionPlayerCmp != null)
+                        sessionPlayerCmp.isLoginAgain = true;
+
                     //踢下线
                     gateSession.Send(new A2C_Disconnect() { Error = ErrorCode.ERR_LoginElsewhere });
                     gateSession?.Disconnect().Coroutine();

@@ -555,4 +555,87 @@ namespace ET
 
 	}
 
+//-----------玩家缓存相关-----------
+//增加或更新Unit缓存
+	[ResponseType(nameof(UnitCache2Other_AddOrUpdateUnitResponse))]
+	[Message(InnerOpcode.Other2UnitCache_AddOrUpdateUnitRequest)]
+	[ProtoContract]
+	public partial class Other2UnitCache_AddOrUpdateUnitRequest: Object, IActorRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[ProtoMember(2)]
+		public List<string> EnitityTypes = new List<string>();
+
+		[ProtoMember(3)]
+		public List<byte[]> EntityBytes = new List<byte[]>();
+
+	}
+
+	[Message(InnerOpcode.UnitCache2Other_AddOrUpdateUnitResponse)]
+	[ProtoContract]
+	public partial class UnitCache2Other_AddOrUpdateUnitResponse: Object, IActorResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+//读取Unit缓存
+	[ResponseType(nameof(UnitCache2Other_GetUnitResponse))]
+	[Message(InnerOpcode.Other2UnitCache_GetUnitRequest)]
+	[ProtoContract]
+	public partial class Other2UnitCache_GetUnitRequest: Object, IActorRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+		[ProtoMember(2)]
+		public List<string> ComponentNameList = new List<string>();
+
+	}
+
+//删除Unit缓存
+	[ResponseType(nameof(UnitCache2Other_DeleteUnitResponse))]
+	[Message(InnerOpcode.Other2UnitCache_DeleteUnitRequest)]
+	[ProtoContract]
+	public partial class Other2UnitCache_DeleteUnitRequest: Object, IActorRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public long UnitId { get; set; }
+
+	}
+
+	[Message(InnerOpcode.UnitCache2Other_DeleteUnitResponse)]
+	[ProtoContract]
+	public partial class UnitCache2Other_DeleteUnitResponse: Object, IActorResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
+//---------------------------------
 }

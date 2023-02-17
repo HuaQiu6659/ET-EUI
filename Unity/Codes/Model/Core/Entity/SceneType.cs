@@ -12,6 +12,8 @@
 		Account = 7,
 		LoginCenter = 8,
 
+		UnitCache = 9,	//数据缓存服
+
 		// 客户端Model层
 		Client = 30,
 		Zone = 31,

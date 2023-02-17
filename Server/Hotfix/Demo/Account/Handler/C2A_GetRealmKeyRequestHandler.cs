@@ -48,8 +48,6 @@ namespace ET
                 }
             }
 
-            await ETTask.CompletedTask;
-
             void RequestError(int errorCode)
             {
                 response.Error = errorCode;

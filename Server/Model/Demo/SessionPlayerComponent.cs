@@ -5,6 +5,9 @@
 	{
 		public long PlayerInstanceId;
 		public long AccountId;
-		public long SessionId;
+
+		//顶号操作标识
+		public long SessionId;	//自写
+		public bool isLoginAgain;	//字母哥写
 	}
 }

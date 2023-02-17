@@ -14,10 +14,15 @@ namespace ET
                 //主动断开：DisconnectHelper.KickPlayer()
                 var player = Game.EventSystem.Get(self.PlayerInstanceId) as Player;
 
-                //若是顶号登录，Player的SessionInstanceId会发生变化
+				//若是顶号登录，Player的SessionInstanceId会发生变化
+
+				//if (!self.isLoginAgain && player != null) //字母哥写
                 if (player != null && player.SessionInstanceId == self.SessionId)
                     DisconnectHelper.KickPlayer(player).Coroutine();
 
+				self.AccountId = 0;
+				self.PlayerInstanceId = 0;
+                self.isLoginAgain = false;
                 //顶号登录：不执行DisconnectHelper.KickPlayer()，直接将Map中的Unit继承给新的登录
             }
 		}

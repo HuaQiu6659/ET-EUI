@@ -33,9 +33,7 @@ namespace ET
             if (result != ErrorCode.ERR_Success)
                 return;
 
-            var roles = zoneScene.GetComponent<RoleInfosComponent>().roles;
-            self.AddUIScrollItems(ref self.rolesToggleDict, roles.Count);
-            self.View.ELoopScrollList_RolesLoopHorizontalScrollRect.SetVisible(true, roles.Count);
+            self.RefreshCells();
         }
 
         public static void HideWindow(this DlgRoleList self)
@@ -82,12 +80,18 @@ namespace ET
             inputField.text = string.Empty;
             createBtn.interactable = false;
             int result = await LoginHelper.CreateRole(self.ZoneScene(), name);
-            createBtn.interactable = true;
             if (result == ErrorCode.ERR_Success)
-            {
-                self.View.ELoopScrollList_RolesLoopHorizontalScrollRect.totalCount += 1;
-                self.View.ELoopScrollList_RolesLoopHorizontalScrollRect.RefreshCells();
-            }
+                self.RefreshCells();
+        }
+
+        static void RefreshCells(this DlgRoleList self)
+        {
+            var scrollRect = self.View.ELoopScrollList_RolesLoopHorizontalScrollRect;
+            var roles = self.ZoneScene().GetComponent<RoleInfosComponent>().roles;
+            self.RemoveUIScrollItems(ref self.rolesToggleDict);
+            self.AddUIScrollItems(ref self.rolesToggleDict, roles.Count);
+            scrollRect.SetVisible(true, roles.Count);
+            scrollRect.RefreshCells();
         }
 
         static async void OnDeleteRoleButtonClick(this DlgRoleList self)
