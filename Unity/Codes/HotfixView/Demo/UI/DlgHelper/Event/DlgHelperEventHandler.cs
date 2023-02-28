@@ -28,12 +28,13 @@
 		}
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)
-		{
-		}
+        {
+            uiBaseWindow.GetComponent<DlgHelper>().HideWindow();
+        }
 
 		public void BeforeUnload(UIBaseWindow uiBaseWindow)
 		{
-		}
 
+		}
 	}
 }

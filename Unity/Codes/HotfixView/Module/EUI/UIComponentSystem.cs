@@ -181,7 +181,7 @@ namespace ET
         /// <param name="self"></param>
         /// <param name="showData"></param>
         /// <typeparam name="T"></typeparam>
-        public static void ShowWindow<T>(this UIComponent self, ShowWindowData showData = null) where T : Entity,IUILogic
+        public static void ShowWindow<T>(this UIComponent self, ShowWindowData showData = null) where T : Entity, IUILogic
         {
             WindowID windowsId = self.GetWindowIdByGeneric<T>();
             self.ShowWindow(windowsId,showData);
@@ -193,7 +193,7 @@ namespace ET
         /// <param name="self"></param>
         /// <param name="id"></param>
         /// <param name="showData"></param>
-        public static async ETTask ShowWindowAsync(this UIComponent self,WindowID id, ShowWindowData showData = null)
+        public static async ETTask ShowWindowAsync(this UIComponent self, WindowID id, ShowWindowData showData = null)
         {
             UIBaseWindow baseWindow = self.GetUIBaseWindow(id);
             try
@@ -216,10 +216,10 @@ namespace ET
         /// <param name="self"></param>
         /// <param name="showData"></param>
         /// <typeparam name="T"></typeparam>
-        public static async ETTask ShowWindowAsync<T>(this UIComponent self, ShowWindowData showData = null) where T : Entity,IUILogic
+        public static async ETTask ShowWindowAsync<T>(this UIComponent self, ShowWindowData showData = null) where T : Entity, IUILogic
         {
             WindowID windowsId = self.GetWindowIdByGeneric<T>();
-           await self.ShowWindowAsync(windowsId,showData);
+            await self.ShowWindowAsync(windowsId,showData);
         }
         
         

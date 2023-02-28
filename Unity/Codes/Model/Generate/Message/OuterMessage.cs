@@ -493,6 +493,42 @@ namespace ET
 
 	}
 
+//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 框架Demo自带Protobuf ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 项目所需Protobuf ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+	[ResponseType(nameof(A2C_Regist))]
+	[Message(OuterOpcode.C2A_Regist)]
+	[ProtoContract]
+	public partial class C2A_Regist: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string Account { get; set; }
+
+		[ProtoMember(2)]
+		public string Password { get; set; }
+
+		[ProtoMember(3)]
+		public string EMail { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_Regist)]
+	[ProtoContract]
+	public partial class A2C_Regist: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+	}
+
 	[ResponseType(nameof(A2C_LoginAccount))]
 	[Message(OuterOpcode.C2A_LoginAccount)]
 	[ProtoContract]

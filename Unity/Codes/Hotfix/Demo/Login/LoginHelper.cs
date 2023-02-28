@@ -6,17 +6,43 @@ namespace ET
 {
     [FriendClass(typeof(ServerInfosComponent)),
         FriendClass(typeof(RoleInfosComponent))]
-    [FriendClassAttribute(typeof(ET.RoleInfo))]
+    [FriendClass(typeof(ET.RoleInfo))]
     public static class LoginHelper
     {
-        public static async ETTask<int> Login(Scene zoneScene, string address, string account, string password)
+        public static async ETTask<int> Regist(Scene zoneScene, string account, string password, string email)
+        {
+            A2C_Regist response = null;
+            Session session = null;
+
+            try
+            {
+                session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(ConstValue.LoginAddress));
+                response = (A2C_Regist)await session.Call(new C2A_Regist() { Account = account, Password = MD5Helper.StringMD5(password), EMail = MD5Helper.StringMD5(email) });
+
+                return Finish(response.Error);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return Finish(ErrorCode.ERR_NetworkError);
+            }
+
+            //登录失败，断开连接
+            int Finish(int errorCode)
+            {
+                session?.Dispose();
+                return errorCode;
+            }
+        }
+
+        public static async ETTask<int> Login(Scene zoneScene, string account, string password)
         {
             A2C_LoginAccount a2C_Login = null;
             Session accountSession = null;
 
             try
             {
-                accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(address));
+                accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(ConstValue.LoginAddress));
                 a2C_Login = (A2C_LoginAccount)await accountSession.Call(new C2A_LoginAccount() { Account = account, Password = MD5Helper.StringMD5(password) });
 
                 if (a2C_Login.Error != ErrorCode.ERR_Success)

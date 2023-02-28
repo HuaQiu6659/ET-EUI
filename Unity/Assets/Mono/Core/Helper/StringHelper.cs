@@ -99,6 +99,46 @@ namespace ET
 
 			argStr += "]";
 			return argStr;
-		}
-	}
+        }
+        private static StringBuilder stringBuilder = new StringBuilder();
+
+        public static StringBuilder GetShareStringBuilder()
+        {
+            stringBuilder.Clear();
+            return stringBuilder;
+        }
+
+        public static string Format(string src, params object[] args)
+        {
+            stringBuilder.Clear();
+            stringBuilder.AppendFormat(src, args);
+            return stringBuilder.ToString();
+        }
+
+        public static string Concat(string head, string append, params string[] strArray)
+        {
+            stringBuilder.Clear();
+            stringBuilder.Append(head);
+            stringBuilder.Append(append);
+            if (strArray.Length > 0)
+                for (int i = 0; i < strArray.Length; i++)
+                    stringBuilder.Append(strArray[i]);
+            return stringBuilder.ToString();
+        }
+
+        public static string ConcatLines(string head, params string[] strArray)
+        {
+            if (strArray.Length < 1)
+                return head;
+
+            stringBuilder.Clear();
+            stringBuilder.Append(head);
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                stringBuilder.Append('\n');
+                stringBuilder.Append(strArray[i]);
+            }
+            return stringBuilder.ToString();
+        }
+    }
 }

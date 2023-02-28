@@ -8,83 +8,49 @@ using UnityEngine;
 
 using ET;
 using NUnit.Framework;
-using UnityEngine.UI;
 
 public partial class UICodeSpawner
 {
 	static public void SpawnEUICode(GameObject gameObject)
 	{
-		if (!gameObject)
+		if (null == gameObject)
 		{
 			Debug.LogError("UICode Select GameObject is null!");
 			return;
 		}
 
-        string uiName = gameObject.name;
-        try
-        {
+		try
+		{
+			string uiName = gameObject.name;
 			if (uiName.StartsWith(UIPanelPrefix))
 			{
 				Debug.Log($"----------开始生成Dlg{uiName} 相关代码 ----------");
 				SpawnDlgCode(gameObject);
-				Debug.Log($"生成Dlg：{uiName} 完毕!!!");
-				SetAssetBundleName(UIPanelPrefix);
-                return;
+				Debug.Log($"生成Dlg{uiName} 完毕!!!");
+				return;
 			}
 			else if(uiName.StartsWith(CommonUIPrefix))
 			{
 				Debug.Log($"-------- 开始生成子UI: {uiName} 相关代码 -------------");
 				SpawnSubUICode(gameObject);
-				Debug.LogWarning($"生成子UI: {uiName} 完毕!!!");
-                SetAssetBundleName(CommonUIPrefix);
-                return;
+				Debug.Log($"生成子UI: {uiName} 完毕!!!");
+				return;
 			}
 			else if (uiName.StartsWith(UIItemPrefix))
 			{
 				Debug.Log($"-------- 开始生成滚动列表项: {uiName} 相关代码 -------------");
 				SpawnLoopItemCode(gameObject);
-				Debug.Log($" 生成滚动列表项: {uiName} 完毕！！！");
-                CheckLayoutElementExist();
-                SetAssetBundleName(UIItemPrefix);
-                return;
-            }
-            Debug.LogError($"选择的预设物不属于 Dlg, 子UI，滚动列表项，请检查 {uiName}！！！！！！");
-        }
+				Debug.Log($" 开始生成滚动列表项: {uiName} 完毕！！！");
+				return;
+			}
+			Debug.LogError($"选择的预设物不属于 Dlg, 子UI，滚动列表项，请检查 {uiName}！！！！！！");
+		}
 		finally
 		{
 			Path2WidgetCachedDict?.Clear();
 			Path2WidgetCachedDict = null;
-        }
-
-		void SetAssetBundleName(string directory)
-        {
-            //判断GameObject为预制体或者场景物体
-            PrefabAssetType type = PrefabUtility.GetPrefabAssetType(gameObject);
-            if (!gameObject.transform.parent)
-                return;
-
-            Debug.Log($"----------开始生成 {uiName} 预制体 ----------");
-            string prefabPath = $"Assets/Bundles/UI/{directory}/{uiName}.prefab";
-
-            if (File.Exists(prefabPath))
-                Debug.LogWarning($"已存在{uiName}预制体，该预制体将会被覆盖。");
-
-            PrefabUtility.SaveAsPrefabAsset(gameObject, prefabPath);
-            AssetImporter assetImporter = AssetImporter.GetAtPath(prefabPath);
-            assetImporter.assetBundleName = $"{uiName.ToLower()}.unity3d";
-            AssetDatabase.Refresh();
-            Debug.Log($" 生成预制体: {uiName} 完毕！！！");
-        }
-
-        void CheckLayoutElementExist()
-        {
-            if (gameObject.TryGetComponent(out LayoutElement layout))
-                return;
-
-            layout = gameObject.AddComponent<LayoutElement>();
-            layout.preferredWidth = ((RectTransform)layout.transform).rect.width;
-        }
-    }
+		}
+	}
 	
 	
     static public void SpawnDlgCode(GameObject gameObject)
@@ -219,8 +185,8 @@ public partial class UICodeSpawner
 	    strFilePath = Application.dataPath + "/../Codes/HotfixView/Demo/UI/" + strDlgName + "/Event/" + strDlgName + "EventHandler.cs";
         if(System.IO.File.Exists(strFilePath))
         {
-	        Debug.LogWarning(strFilePath + "将被覆盖。");
-            File.Delete(strFilePath);
+	        Debug.LogError("已存在 " + strDlgName + "EventHandler.cs,将不会再次生成。");
+            return;
         }
         SpawnWindowIdCode(gameObject);
         StreamWriter sw = new StreamWriter(strFilePath, false, Encoding.UTF8);
@@ -305,8 +271,8 @@ public partial class UICodeSpawner
 	    strFilePath = Application.dataPath + "/../Codes/ModelView/Demo/UI/" + strDlgName  + "/" + strDlgName  + ".cs";
         if(System.IO.File.Exists(strFilePath))
         {
-            Debug.LogWarning(strFilePath + "将被覆盖。");
-            File.Delete(strFilePath);
+	        Debug.LogWarning("已存在 " + strDlgName + ".c,将重新生成。");
+			File.Delete(strFilePath);
         }
 
         StreamWriter sw = new StreamWriter(strFilePath, false, Encoding.UTF8);
@@ -563,7 +529,7 @@ public partial class UICodeSpawner
 
     public static void FindAllWidgets(Transform trans, string strPath)
 	{
-		if (!trans)
+		if (null == trans)
 		{
 			return;
 		}

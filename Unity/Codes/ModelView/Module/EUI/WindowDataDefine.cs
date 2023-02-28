@@ -1,10 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace ET
+﻿namespace ET
 {
-    
     public enum UIWindowType
     {
         Normal,    // 普通主界面
@@ -18,8 +13,7 @@ namespace ET
         public UIWindowType windowType = UIWindowType.Normal;
     }
     
-    
-    public class ShowWindowData : Entity
+    public class ShowWindowData : Entity, IAwake
     {
         public Entity contextData;
     }

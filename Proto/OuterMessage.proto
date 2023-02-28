@@ -238,6 +238,25 @@ message M2C_TransferMap // IActorLocationResponse
 	int32 Error = 91;
 	string Message = 92;
 }
+//↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 框架Demo自带Protobuf ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 项目所需Protobuf ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+//ResponseType A2C_Regist
+message C2A_Regist // IRequest
+{
+	int32 RpcId = 90;
+
+	string Account = 1;
+	string Password = 2;
+	string EMail = 3;
+}
+
+message A2C_Regist //IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+}
 
 //ResponseType A2C_LoginAccount
 message C2A_LoginAccount // IRequest

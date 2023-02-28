@@ -9,70 +9,97 @@ namespace ET
 {
 	public static class DlgLoginSystem
 	{
-		public static void RegisterUIEvent(this DlgLogin self)
-		{
-			self.View.E_LoginButton.AddListenerAsync(self.OnLoginClickHandler);
-			self.View.E_AccountInputField.onValueChanged.AddListener(input => self.View.E_PasswordInputField.text = string.Empty);
-		}
+        #region ------------- 响应事件 -------------
 
-		public static void ShowWindow(this DlgLogin self, Entity contextData = null) { }
-		
-		public static async ETTask OnLoginClickHandler(this DlgLogin self)
-		{
-			try
-			{
-				string account = self.View.E_AccountInputField.text;
-				string password = self.View.E_PasswordInputField.text;
+        public static void RegisterUIEvent(this DlgLogin self)
+        {
+            var view = self.View;
+            view.E_LoginButton.AddListenerAsync(self.OnLoginClickHandler);
+            view.E_AccountInputField.onValueChanged.AddListener(input => self.View.E_PasswordInputField.text = string.Empty);
+            view.E_PasswordInputField.onValueChanged.AddListener(self.OnPasswordInput);
+            view.E_PasswordVisitableToggle.AddListener(self.OnPasswordVisitableToggleValueChanged);
+            view.E_RegistButton.AddListener(self.OnRegistBtnClick);
+        }
+
+        static async ETTask OnLoginClickHandler(this DlgLogin self)
+        {
+            var view = self.View;
+
+            var loginBtn = view.E_LoginButton;
+            loginBtn.SetUntouchable();
+
+            try
+            {
+                string account = view.E_AccountInputField.text;
+                string password = view.E_PasswordInputField.text;
                 int error = await LoginHelper.Login(
                     self.DomainScene(),
-                    ConstValue.LoginAddress,
                     account,
                     password);
 
-				if (error != ErrorCode.ERR_Success)
-				{
-					Log.Error(error.ToString());
-					return;
-				}
+                if (error != ErrorCode.ERR_Success)
+                {
+                    Log.Error(error.ToString());
+                    return;
+                }
 
-				//TODO:显示登录成功后的逻辑
-				var uiCmp = self.DomainScene().GetComponent<UIComponent>();
+                //TODO:显示登录成功后的逻辑
+                var uiCmp = self.DomainScene().GetComponent<UIComponent>();
                 uiCmp.HideWindow(WindowID.WindowID_Login);
                 uiCmp.ShowWindow(WindowID.WindowID_ServerList);
 
-#if UNITY_EDITOR
-				UnityEditor.EditorPrefs.SetString("Account", account);
-				UnityEditor.EditorPrefs.SetString("Password", password);
-#else
-				PlayerPrefs.SetString("Account", account);
-				PlayerPrefs.SetString("Password", password);
-#endif
-
+                PlayerPrefs.SetString("Account", account);
+                PlayerPrefs.SetString("Password", password);
             }
             catch (Exception e)
-			{
-				Log.Error(e.Message);
-			}
-		}
+            {
+                Log.Error(e.Message);
+            }
+            finally
+            {
+                loginBtn.SetTouchable();
+            }
+        }
+
+        static void OnPasswordVisitableToggleValueChanged(this DlgLogin self, bool isOn)
+        {
+            var view = self.View;
+            view.E_PasswordVisitableBackgroundImage.enabled = !isOn;
+            view.E_PasswordInputField.contentType = isOn ? InputField.ContentType.Standard : InputField.ContentType.Password;
+            view.E_PasswordInputField.ForceLabelUpdate();
+        }
+
+        static void OnPasswordInput(this DlgLogin self, string input)
+        {
+            var view = self.View;
+            var accountLength = view.E_AccountInputField.text.Length;
+            view.E_LoginButton.interactable = input.Length >= 6 && input.Length <= 20 && accountLength >= 6 && accountLength <= 20;
+        }
+
+        static void OnRegistBtnClick(this DlgLogin self)
+        {
+            var uiCmp = self.DomainScene().GetComponent<UIComponent>();
+            uiCmp.HideWindow(WindowID.WindowID_Login);
+            uiCmp.ShowWindow(WindowID.WindowID_Regist);
+        }
+
+        #endregion
+
+        public static void ShowWindow(this DlgLogin self, Entity contextData = null)
+        {
+			var view = self.View;
+            view.E_AccountInputField.text = PlayerPrefs.GetString("Account", default);
+            view.E_PasswordInputField.text = PlayerPrefs.GetString("Password", default);
+        }
 		
 		public static void HideWindow(this DlgLogin self)
 		{
 
 		}
-		
 	}
 
 	public class DlgLoginAwakeSystem : AwakeSystem<DlgLogin>
 	{
-		public override void Awake(DlgLogin self)
-        {
-#if UNITY_EDITOR
-            self.View.E_AccountInputField.text = UnityEditor.EditorPrefs.GetString("Account", "TestAccount");
-            self.View.E_PasswordInputField.text = UnityEditor.EditorPrefs.GetString("Password", "TestPassword");
-#else
-            self.View.E_AccountInputField.text = PlayerPrefs.GetString("Account", "TestAccount");
-            self.View.E_PasswordInputField.text = PlayerPrefs.GetString("Password", "TestPassword");
-#endif
-        }
+		public override void Awake(DlgLogin self) { }
     }
 }

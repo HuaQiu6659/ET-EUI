@@ -11,10 +11,11 @@ namespace ClientEditor
 {
     class UIEditorController
     {
-        [MenuItem("GameObject/SpawnEUICode", priority = -2)]
+        [MenuItem("GameObject/SpawnEUICode", false, -2)]
         static public void CreateNewCode()
         {
-            UICodeSpawner.SpawnEUICode(Selection.activeGameObject);
+            GameObject go = Selection.activeObject as GameObject;
+            UICodeSpawner.SpawnEUICode(go);
         }
 
         [MenuItem("Assets/AssetBundle/NameUIPrefab")]
