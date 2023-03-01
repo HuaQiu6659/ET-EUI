@@ -43,6 +43,8 @@ namespace ET
                     //需要对外连接
                     scene.AddComponent<NetKcpComponent, IPEndPoint, int>(startSceneConfig.OuterIPPort, SessionStreamDispatcherType.SessionStreamDispatcherServerOuter);
                     scene.AddComponent<TokensComponent>();
+
+                    scene.AddComponent<EMailComponent>();
                     scene.AddComponent<AccountSessionsComponent>();
                     scene.AddComponent<ServerInfoManagerComponent>();
                     break;

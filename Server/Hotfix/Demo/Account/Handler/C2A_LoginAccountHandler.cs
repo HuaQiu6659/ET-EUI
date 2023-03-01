@@ -10,13 +10,8 @@ namespace ET
     {
         protected override async ETTask Run(Session session, C2A_LoginAccount request, A2C_LoginAccount response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Account)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Account))
                 return;
-            }
 
             //带有该组件时新创建的连接只会维持5秒，当前视为通过连接验证，因此去除该限制
             session.RemoveComponent<SessionAcceptTimeoutComponent>();
@@ -24,14 +19,14 @@ namespace ET
             //避免同一连接多次登录请求
             if (session.GetComponent<SessionLockingComponent>() != null)
             {
-                LoginError(ErrorCode.ERR_MultipleRequest);
+                session.Reply(response, reply, ErrorCode.ERR_MultipleRequest, true);
                 return;
             }
 
             //判定账号密码是否为空
             if (string.IsNullOrEmpty(request.Account) || string.IsNullOrEmpty(request.Password))
             {
-                LoginError(ErrorCode.ERR_EmptyInput);
+                session.Reply(response, reply, ErrorCode.ERR_EmptyInput, true);
                 return;
             }
 
@@ -39,7 +34,7 @@ namespace ET
             if (!Regex.IsMatch(request.Account, @"^[a-zA-Z0-9]{6,17}$") 
                 || !Regex.IsMatch(request.Password, @"^[a-zA-Z0-9]+$"))
             {
-                LoginError(ErrorCode.ERR_IllegalInput);
+                session.Reply(response, reply, ErrorCode.ERR_IllegalInput, true);
                 return;
             }
 
@@ -60,44 +55,31 @@ namespace ET
                         //判断账号密码正确性
                         if (!account.password.Equals(request.Password))
                         {
-                            LoginError(ErrorCode.ERR_WrongPassword);
+                            session.Reply(response, reply, ErrorCode.ERR_WrongPassword, true);
                             account?.Dispose();
                             return;
                         }
 
                         if (account.accountType == AccountType.BlackList)
                         {
-                            LoginError(ErrorCode.ERR_BlackList);
+                            session.Reply(response, reply, ErrorCode.ERR_BlackList, true);
                             account?.Dispose();
                             return;
                         }
                     }
-                    else //自动注册
+                    else //不存在
                     {
-                        //检测账号密码是否相同
-                        if (request.Account.Equals(request.Password))
-                        {
-                            LoginError(ErrorCode.ERR_AccountEqualPassword);
-                            return;
-                        }
-
-                        account = session.AddChild<Account>();
-                        account.account = request.Account;
-                        account.password = request.Password;
-                        account.createTime = TimeHelper.ServerNow();
-                        account.accountType = AccountType.General;
-
-                        //根据Session的Zone区分不同区服的数据库
-                        await db.GetZoneDB(session.DomainZone()).Save(account);
+                        session.Reply(response, reply, ErrorCode.ERR_Unregist, true);
+                        return;
                     }
 
                     //向登录中心服发送请求
                     StartSceneConfig startSceneConfig = StartSceneConfigCategory.Instance.GetBySceneName(session.DomainZone(), "LoginCenter");
                     long loginCenterInstanceId = startSceneConfig.InstanceId;
                     L2A_LoginAccountResponse l2A_LoginAccountResponse = (L2A_LoginAccountResponse)await ActorMessageSenderComponent.Instance.Call(loginCenterInstanceId, new A2L_LoginAccountRequest() { AccountId = account.Id });
-                    if (l2A_LoginAccountResponse.Error != ErrorCode.ERR_Success) 
+                    if (l2A_LoginAccountResponse.Error != ErrorCode.ERR_Success)
                     {
-                        LoginError(l2A_LoginAccountResponse.Error);
+                        session.Reply(response, reply, l2A_LoginAccountResponse.Error, true);
                         return;
                     }
 
@@ -127,13 +109,6 @@ namespace ET
                     reply();
                     account?.Dispose();
                 }
-            }
-
-            void LoginError(int errorCode)
-            {
-                response.Error = errorCode;
-                reply();
-                session?.Disconnect().Coroutine();
             }
         }
     }

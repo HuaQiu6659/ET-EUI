@@ -8,13 +8,9 @@ namespace ET
     {
         protected override async ETTask Run(Session session, C2G_LoginGameGateRequest request, G2C_LoginGameGateResponse response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Gate)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Gate，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Gate))
                 return;
-            }
+
             session.RemoveComponent<SessionAcceptTimeoutComponent>();   //基本等于登录成功，之后要保持长时间的连接
 
             if (session.GetComponent<SessionLockingComponent>() != null)

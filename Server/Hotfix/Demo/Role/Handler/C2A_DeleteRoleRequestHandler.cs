@@ -7,13 +7,8 @@ namespace ET.Demo.Role.Handler
     {
         protected override async ETTask Run(Session session, C2A_DeleteRoleRequest request, A2C_DeleteRoleResponse response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Account)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Account))
                 return;
-            }
 
             //判定Token
             var sessionDomainScene = session.DomainScene();

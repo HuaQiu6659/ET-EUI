@@ -9,13 +9,8 @@ namespace ET
     {
         protected override async ETTask Run(Session session, C2G_EnterGameRequest request, G2C_EnterGameResponse response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Gate)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Gate，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Gate))
                 return;
-            }
 
             if (session.GetComponent<SessionLockingComponent>() != null)
             {

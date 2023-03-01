@@ -177,6 +177,74 @@ namespace ET
      		}
      	}
 
+		public UnityEngine.UI.InputField E_VerificationInputField
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_VerificationInputField == null )
+     			{
+		    		this.m_E_VerificationInputField = UIFindHelper.FindDeepChild<UnityEngine.UI.InputField>(this.uiTransform.gameObject,"E_Verification");
+     			}
+     			return this.m_E_VerificationInputField;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_VerificationImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_VerificationImage == null )
+     			{
+		    		this.m_E_VerificationImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Verification");
+     			}
+     			return this.m_E_VerificationImage;
+     		}
+     	}
+
+		public UnityEngine.UI.Button E_SendVerificationButton
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_SendVerificationButton == null )
+     			{
+		    		this.m_E_SendVerificationButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"E_SendVerification");
+     			}
+     			return this.m_E_SendVerificationButton;
+     		}
+     	}
+
+		public UnityEngine.UI.Image E_SendVerificationImage
+     	{
+     		get
+     		{
+     			if (this.uiTransform == null)
+     			{
+     				Log.Error("uiTransform is null.");
+     				return null;
+     			}
+     			if( this.m_E_SendVerificationImage == null )
+     			{
+		    		this.m_E_SendVerificationImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_SendVerification");
+     			}
+     			return this.m_E_SendVerificationImage;
+     		}
+     	}
+
 		public UnityEngine.UI.Button E_RegistButton
      	{
      		get
@@ -257,6 +325,10 @@ namespace ET
 			this.m_E_RePasswordImage = null;
 			this.m_E_EMailInputField = null;
 			this.m_E_EMailImage = null;
+			this.m_E_VerificationInputField = null;
+			this.m_E_VerificationImage = null;
+			this.m_E_SendVerificationButton = null;
+			this.m_E_SendVerificationImage = null;
 			this.m_E_RegistButton = null;
 			this.m_E_RegistImage = null;
 			this.m_E_PasswordVisitableToggle = null;
@@ -274,6 +346,10 @@ namespace ET
 		private UnityEngine.UI.Image m_E_RePasswordImage = null;
 		private UnityEngine.UI.InputField m_E_EMailInputField = null;
 		private UnityEngine.UI.Image m_E_EMailImage = null;
+		private UnityEngine.UI.InputField m_E_VerificationInputField = null;
+		private UnityEngine.UI.Image m_E_VerificationImage = null;
+		private UnityEngine.UI.Button m_E_SendVerificationButton = null;
+		private UnityEngine.UI.Image m_E_SendVerificationImage = null;
 		private UnityEngine.UI.Button m_E_RegistButton = null;
 		private UnityEngine.UI.Image m_E_RegistImage = null;
 		private UnityEngine.UI.Toggle m_E_PasswordVisitableToggle = null;

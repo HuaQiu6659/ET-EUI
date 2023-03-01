@@ -12,13 +12,8 @@ namespace ET.Demo.Role.Handler
     {
         protected override async ETTask Run(Session session, C2A_CreateRoleRequest request, A2C_CreateRoleResponse response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Account)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Account))
                 return;
-            }
 
             //避免短时间多次相同请求
             if (session.GetComponent<SessionLockingComponent>() != null)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ET
 {
@@ -139,6 +140,13 @@ namespace ET
                 stringBuilder.Append(strArray[i]);
             }
             return stringBuilder.ToString();
+        }
+
+        public static bool IsEmail(string inputData)
+        {
+            Regex RegEmail = new Regex("^[\\w-]+@[\\w-]+\\.(com|net|org|edu|mil|tv|biz|info)$");
+            //w 英文字母或数字的字符串，和 [a-zA-Z0-9] 语法一样 
+            return RegEmail.IsMatch(inputData);
         }
     }
 }

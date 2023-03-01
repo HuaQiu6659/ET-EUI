@@ -241,6 +241,24 @@ message M2C_TransferMap // IActorLocationResponse
 //↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 框架Demo自带Protobuf ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
 //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 项目所需Protobuf ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+//获取验证码
+//ResponseType A2C_Verification
+message C2A_Verification // IRequest
+{
+	int32 RpcId = 90;
+
+	string EMail = 1;
+}
+
+message A2C_Verification // IResponse
+{
+	int32 RpcId = 90;
+	int32 Error = 91;
+	string Message = 92;
+
+	string Verification = 1;
+}
+
 //ResponseType A2C_Regist
 message C2A_Regist // IRequest
 {

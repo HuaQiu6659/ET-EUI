@@ -6,13 +6,8 @@ namespace ET
     {
         protected override async ETTask Run(Session session, C2R_LoginRealmRequest request, R2C_LoginRealmResponse response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Realm)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Realm，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Realm))
                 return;
-            }
 
             if (session.GetComponent<SessionLockingComponent>() != null)
             {

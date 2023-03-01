@@ -495,6 +495,38 @@ namespace ET
 
 //↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 框架Demo自带Protobuf ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 //↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 项目所需Protobuf ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+//获取验证码
+	[ResponseType(nameof(A2C_Verification))]
+	[Message(OuterOpcode.C2A_Verification)]
+	[ProtoContract]
+	public partial class C2A_Verification: Object, IRequest
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(1)]
+		public string EMail { get; set; }
+
+	}
+
+	[Message(OuterOpcode.A2C_Verification)]
+	[ProtoContract]
+	public partial class A2C_Verification: Object, IResponse
+	{
+		[ProtoMember(90)]
+		public int RpcId { get; set; }
+
+		[ProtoMember(91)]
+		public int Error { get; set; }
+
+		[ProtoMember(92)]
+		public string Message { get; set; }
+
+		[ProtoMember(1)]
+		public string Verification { get; set; }
+
+	}
+
 	[ResponseType(nameof(A2C_Regist))]
 	[Message(OuterOpcode.C2A_Regist)]
 	[ProtoContract]

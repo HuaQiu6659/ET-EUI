@@ -6,13 +6,8 @@ namespace ET
     {
         protected override async ETTask Run(Session session, C2A_GetRealmKeyRequest request, A2C_GetRealmKeyResponse response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Account)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Account))
                 return;
-            }
 
             //判定Token
             var sessionDomainScene = session.DomainScene();

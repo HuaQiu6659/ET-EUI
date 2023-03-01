@@ -24,6 +24,9 @@ namespace ET
                 case ErrorCode.ERR_AccountEqualPassword:
                     return "账号与密码相同。";
 
+                case ErrorCode.ERR_SendEMailFail:
+                    return "获取验证码失败。";
+
                 default:
                     return string.Empty;
             }

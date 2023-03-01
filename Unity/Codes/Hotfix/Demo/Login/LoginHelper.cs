@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using System.Security.Principal;
 
 
 namespace ET
@@ -9,6 +10,25 @@ namespace ET
     [FriendClass(typeof(ET.RoleInfo))]
     public static class LoginHelper
     {
+        public static async ETTask<A2C_Verification> SendRegistVerification(Scene zoneScene, string email)
+        {
+            A2C_Verification response = null;
+            Session session = null;
+
+            try
+            {
+                session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(ConstValue.LoginAddress));
+                response = (A2C_Verification)await session.Call(new C2A_Verification() { EMail = email });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+            }
+            session?.Dispose();
+
+            return response;
+        }
+
         public static async ETTask<int> Regist(Scene zoneScene, string account, string password, string email)
         {
             A2C_Regist response = null;

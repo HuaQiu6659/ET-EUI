@@ -8,25 +8,20 @@ namespace ET
     {
         protected async override ETTask Run(Session session, C2A_Regist request, A2C_Regist response, Action reply)
         {
-            var currentScene = session.DomainScene().SceneType;
-            if (currentScene != SceneType.Account)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Account，当前Scene：{currentScene}");
-                session.Dispose();
+            if (!session.CheckScene(SceneType.Account))
                 return;
-            }
 
             //避免同一连接多次登录请求
             if (session.GetComponent<SessionLockingComponent>() != null)
             {
-                FinishRegist(ErrorCode.ERR_MultipleRequest);
+                session.Reply(response, reply, ErrorCode.ERR_MultipleRequest, true);
                 return;
             }
 
             //判定账号密码是否为空
             if (string.IsNullOrEmpty(request.Account) || string.IsNullOrEmpty(request.Password) || string.IsNullOrEmpty(request.EMail))
             {
-                FinishRegist(ErrorCode.ERR_EmptyInput);
+                session.Reply(response, reply, ErrorCode.ERR_EmptyInput, true);
                 return;
             }
 
@@ -35,7 +30,7 @@ namespace ET
                 || !Regex.IsMatch(request.Password, @"^[a-zA-Z0-9]+$")
                 || !Regex.IsMatch(request.EMail, @"^[a-zA-Z0-9]+$"))
             {
-                FinishRegist(ErrorCode.ERR_IllegalInput);
+                session.Reply(response, reply, ErrorCode.ERR_IllegalInput, true);
                 return;
             }
 
@@ -47,7 +42,7 @@ namespace ET
                 Account account = null;
                 if (accountInfoList?.Count > 0) //账号存在
                 {
-                    FinishRegist(ErrorCode.ERR_Registed);
+                    session.Reply(response, reply, ErrorCode.ERR_Registed, true);
                     return;
                 }
                 else //注册
@@ -55,7 +50,7 @@ namespace ET
                     //检测账号密码是否相同
                     if (request.Account.Equals(request.Password))
                     {
-                        FinishRegist(ErrorCode.ERR_AccountEqualPassword);
+                        session.Reply(response, reply, ErrorCode.ERR_AccountEqualPassword, true);
                         return;
                     }
 
@@ -68,15 +63,8 @@ namespace ET
                     //根据Session的Zone区分不同区服的数据库
                     await db.GetZoneDB(session.DomainZone()).Save(account);
 
-                    FinishRegist();
+                    session.Reply(response, reply, 0, true);
                 }
-            }
-
-            void FinishRegist(int errorCode = 0)
-            {
-                response.Error = errorCode;
-                reply();
-                session?.Disconnect().Coroutine();
             }
         }
     }

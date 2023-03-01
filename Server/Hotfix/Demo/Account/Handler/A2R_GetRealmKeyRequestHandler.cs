@@ -6,13 +6,8 @@ namespace ET
     {
         protected override async ETTask Run(Scene scene, A2R_GetRealmKeyRequest request, R2A_GetRealmKeyResponse response, Action reply)
         {
-            if (scene.SceneType != SceneType.Realm)
-            {
-                Log.Error($"请求Scene错误，目标Scene：Realm，当前Scene：{scene.SceneType}");
-                response.Error = ErrorCode.ERR_WrongScene;
-                reply();
+            if (!scene.CheckScene(SceneType.Realm, response, reply))
                 return;
-            }
 
             string key = TimeHelper.ServerNow().ToString() + RandomHelper.RandInt64().ToString();
             var tokensCmp = scene.GetComponent<TokensComponent>();

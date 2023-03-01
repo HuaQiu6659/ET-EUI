@@ -26,7 +26,9 @@ namespace ET
         public const int ERR_EnterGameError         = 200009;
         public const int ERR_ReenterGameError       = 200010;
         public const int ERR_ReenterGameFail        = 200011;
-        public const int ERR_Registed               = 200012; //账号已被注册
+        public const int ERR_Registed               = 200012;   //账号已被注册
+        public const int ERR_Unregist               = 200013;   //账号未注册
+        public const int ERR_SendEMailFail          = 200014;   //发送邮件失败
 
         //通用部分
         public const int ERR_WrongScene             = 300000;
