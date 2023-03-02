@@ -29,7 +29,7 @@ namespace ET
             return response;
         }
 
-        public static async ETTask<int> Regist(Scene zoneScene, string account, string password, string email)
+        public static async ETTask<int> Regist(Scene zoneScene, string email, string password, string verification)
         {
             A2C_Regist response = null;
             Session session = null;
@@ -37,7 +37,7 @@ namespace ET
             try
             {
                 session = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(ConstValue.LoginAddress));
-                response = (A2C_Regist)await session.Call(new C2A_Regist() { Account = account, Password = MD5Helper.StringMD5(password), EMail = MD5Helper.StringMD5(email) });
+                response = (A2C_Regist)await session.Call(new C2A_Regist() {Password = MD5Helper.StringMD5(password), EMail = email, Verification = verification });
 
                 return Finish(response.Error);
             }
@@ -55,7 +55,7 @@ namespace ET
             }
         }
 
-        public static async ETTask<int> Login(Scene zoneScene, string account, string password)
+        public static async ETTask<int> Login(Scene zoneScene, string email, string password)
         {
             A2C_LoginAccount a2C_Login = null;
             Session accountSession = null;
@@ -63,7 +63,7 @@ namespace ET
             try
             {
                 accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(ConstValue.LoginAddress));
-                a2C_Login = (A2C_LoginAccount)await accountSession.Call(new C2A_LoginAccount() { Account = account, Password = MD5Helper.StringMD5(password) });
+                a2C_Login = (A2C_LoginAccount)await accountSession.Call(new C2A_LoginAccount() { Email = email, Password = MD5Helper.StringMD5(password) });
 
                 if (a2C_Login.Error != ErrorCode.ERR_Success)
                     return LoginError(a2C_Login.Error);

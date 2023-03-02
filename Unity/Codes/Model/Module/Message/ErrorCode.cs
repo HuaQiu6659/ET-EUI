@@ -29,6 +29,7 @@ namespace ET
         public const int ERR_Registed               = 200012;   //账号已被注册
         public const int ERR_Unregist               = 200013;   //账号未注册
         public const int ERR_SendEMailFail          = 200014;   //发送邮件失败
+        public const int ERR_WrongVerification      = 200015;   //验证码错误
 
         //通用部分
         public const int ERR_WrongScene             = 300000;

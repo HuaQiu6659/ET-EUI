@@ -7,7 +7,7 @@ namespace ET
 {
     public class Account : Entity, IAwake
     {
-        public string account;
+        public string email;
         public string password;
         public long createTime;
         public AccountType accountType;

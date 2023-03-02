@@ -522,9 +522,6 @@ namespace ET
 		[ProtoMember(92)]
 		public string Message { get; set; }
 
-		[ProtoMember(1)]
-		public string Verification { get; set; }
-
 	}
 
 	[ResponseType(nameof(A2C_Regist))]
@@ -536,13 +533,13 @@ namespace ET
 		public int RpcId { get; set; }
 
 		[ProtoMember(1)]
-		public string Account { get; set; }
+		public string EMail { get; set; }
 
 		[ProtoMember(2)]
 		public string Password { get; set; }
 
 		[ProtoMember(3)]
-		public string EMail { get; set; }
+		public string Verification { get; set; }
 
 	}
 
@@ -570,7 +567,7 @@ namespace ET
 		public int RpcId { get; set; }
 
 		[ProtoMember(1)]
-		public string Account { get; set; }
+		public string Email { get; set; }
 
 		[ProtoMember(2)]
 		public string Password { get; set; }

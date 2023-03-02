@@ -19,6 +19,7 @@ namespace ET
             view.E_PasswordInputField.onValueChanged.AddListener(self.OnPasswordInput);
             view.E_PasswordVisitableToggle.AddListener(self.OnPasswordVisitableToggleValueChanged);
             view.E_RegistButton.AddListener(self.OnRegistBtnClick);
+            view.E_ForgotButton.AddListener(self.OnRegistBtnClick);
         }
 
         static async ETTask OnLoginClickHandler(this DlgLogin self)
@@ -72,8 +73,8 @@ namespace ET
         static void OnPasswordInput(this DlgLogin self, string input)
         {
             var view = self.View;
-            var accountLength = view.E_AccountInputField.text.Length;
-            view.E_LoginButton.interactable = input.Length >= 6 && input.Length <= 20 && accountLength >= 6 && accountLength <= 20;
+            bool isEmail = StringHelper.IsEmail(view.E_AccountInputField.text);
+            view.E_LoginButton.interactable = input.Length >= 6 && input.Length <= 20 && isEmail;
         }
 
         static void OnRegistBtnClick(this DlgLogin self)

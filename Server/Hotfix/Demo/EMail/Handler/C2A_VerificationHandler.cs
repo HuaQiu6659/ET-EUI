@@ -22,15 +22,21 @@ namespace ET
                 return;
             }
 
-            //经常会超过5秒，之后直接手动释放
-            session.RemoveComponent<SessionAcceptTimeoutComponent>();
+            EMailComponent mailComponent = session.DomainScene().GetComponent<EMailComponent>();
 
+            //同一账号多次请求
+            if(mailComponent.ContainEMail(request.EMail))
+            {
+                Finish(ErrorCode.ERR_MultipleRequest);
+                return;
+            }
+
+            session.RemoveComponent<SessionAcceptTimeoutComponent>();
             using (session.AddComponent<SessionLockingComponent>())
             {
                 using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginOrRegiste, request.EMail.GetHashCode()))
                 {
-                    response.Verification = EMailHelper.GetVerification();
-                    await session.DomainScene().GetComponent<EMailComponent>().SendVerification(request.EMail, response);
+                    await mailComponent.SendVerification(request.EMail, response, EMailHelper.GetVerification());
                     Finish(response.Error);
                 }
             }

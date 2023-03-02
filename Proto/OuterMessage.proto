@@ -255,8 +255,6 @@ message A2C_Verification // IResponse
 	int32 RpcId = 90;
 	int32 Error = 91;
 	string Message = 92;
-
-	string Verification = 1;
 }
 
 //ResponseType A2C_Regist
@@ -264,9 +262,9 @@ message C2A_Regist // IRequest
 {
 	int32 RpcId = 90;
 
-	string Account = 1;
+	string EMail = 1;
 	string Password = 2;
-	string EMail = 3;
+	string Verification = 3;
 }
 
 message A2C_Regist //IResponse
@@ -281,7 +279,7 @@ message C2A_LoginAccount // IRequest
 {
 	int32 RpcId = 90;
 
-	string Account = 1;
+	string Email = 1;
 	string Password = 2;
 }
 

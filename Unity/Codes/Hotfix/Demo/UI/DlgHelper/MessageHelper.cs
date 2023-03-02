@@ -27,6 +27,12 @@ namespace ET
                 case ErrorCode.ERR_SendEMailFail:
                     return "获取验证码失败。";
 
+                case ErrorCode.ERR_MultipleRequest:
+                    return "操作过于频繁。";
+
+                case ErrorCode.ERR_WrongVerification:
+                    return "验证码错误。";
+
                 default:
                     return string.Empty;
             }

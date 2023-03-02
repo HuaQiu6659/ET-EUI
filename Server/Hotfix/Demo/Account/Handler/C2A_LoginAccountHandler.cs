@@ -24,14 +24,14 @@ namespace ET
             }
 
             //判定账号密码是否为空
-            if (string.IsNullOrEmpty(request.Account) || string.IsNullOrEmpty(request.Password))
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
                 session.Reply(response, reply, ErrorCode.ERR_EmptyInput, true);
                 return;
             }
 
             //限长度，防注入
-            if (!Regex.IsMatch(request.Account, @"^[a-zA-Z0-9]{6,17}$") 
+            if (!StringHelper.IsEmail(request.Email) 
                 || !Regex.IsMatch(request.Password, @"^[a-zA-Z0-9]+$"))
             {
                 session.Reply(response, reply, ErrorCode.ERR_IllegalInput, true);
@@ -41,11 +41,11 @@ namespace ET
             using (session.AddComponent<SessionLockingComponent>())
             {
                 //协程锁 保证同一账号不会再多处同时被注册
-                using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginOrRegiste, request.Account.GetHashCode()))
+                using (await CoroutineLockComponent.Instance.Wait(CoroutineLockType.LoginOrRegiste, request.Email.GetHashCode()))
                 {
                     //数据库检测账号密码
                     var db = DBManagerComponent.Instance;
-                    var accountInfoList = await db.GetZoneDB(session.DomainZone()).Query<Account>(d => d.account.Equals(request.Account));
+                    var accountInfoList = await db.GetZoneDB(session.DomainZone()).Query<Account>(d => d.email.Equals(request.Email));
                     Account account = null;
                     if (accountInfoList?.Count > 0) //账号存在
                     {
