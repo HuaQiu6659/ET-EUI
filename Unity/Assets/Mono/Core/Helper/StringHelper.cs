@@ -142,11 +142,15 @@ namespace ET
             return stringBuilder.ToString();
         }
 
-        public static bool IsEmail(string inputData)
-        {
-            Regex RegEmail = new Regex("^[\\w-]+@[\\w-]+\\.(com|net|org|edu|mil|tv|biz|info)$");
-            //w 英文字母或数字的字符串，和 [a-zA-Z0-9] 语法一样 
-            return RegEmail.IsMatch(inputData);
-        }
-    }
+		public static bool IsEmail(string input) =>
+			//w 英文字母或数字的字符串，和 [a-zA-Z0-9] 语法一样 
+			Regex.IsMatch(input, "^[\\w-]+@[\\w-]+\\.(com|net|org|edu|mil|tv|biz|info)$");
+
+		/// <summary>
+		/// 含有除字母 数字以外的特殊符号
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns>True：含有</returns>
+		public static bool HasSymbol(string input) => !Regex.IsMatch(input, @"^[a-zA-Z0-9]+$");
+	}
 }

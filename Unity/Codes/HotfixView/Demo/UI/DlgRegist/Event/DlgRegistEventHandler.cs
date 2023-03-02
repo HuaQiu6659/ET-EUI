@@ -24,12 +24,13 @@
 
 		public void OnShowWindow(UIBaseWindow uiBaseWindow, Entity contextData = null)
 		{
-		  uiBaseWindow.GetComponent<DlgRegist>().ShowWindow(contextData); 
-		}
+			uiBaseWindow.GetComponent<DlgRegist>().ShowWindow(contextData);
+        }
 
 		public void OnHideWindow(UIBaseWindow uiBaseWindow)
 		{
-		}
+
+        }
 
 		public void BeforeUnload(UIBaseWindow uiBaseWindow)
 		{

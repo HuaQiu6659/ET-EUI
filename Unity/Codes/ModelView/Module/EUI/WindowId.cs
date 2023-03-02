@@ -12,5 +12,7 @@ namespace ET
 		WindowID_ServerList,
 		WindowID_RoleList,
 		WindowID_Regist,
+		WindowID_MessageDefault,
+		WindowID_MessageError,
 	}
 }

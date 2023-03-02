@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.Networking.UnityWebRequest;
+﻿using UnityEngine.UI;
 
 namespace ET
 {
     [FriendClass(typeof(DlgRegist))]
+    [FriendClassAttribute(typeof(ET.DlgRegistTypeComponent))]
     public static class DlgRegistSystem
     {
         #region ------------ 响应事件 ------------
@@ -16,8 +12,9 @@ namespace ET
         {
             var view = self.View;
             view.E_PasswordVisitableToggle.AddListener(self.OnPasswordVisitableToggleValueChanged);
-            view.E_RegistButton.AddListener(self.OnRegistBtnClick);
+            view.E_SubmitButton.AddListener(self.OnSubmitBtnClick);
             view.E_ReturnButton.AddListener(self.OnReturnBtnClick);
+            view.E_LoginButton.AddListener(self.OnReturnBtnClick);
             view.E_SendVerificationButton.AddListener(self.OnSendVerificationButtonClick);
         }
 
@@ -78,7 +75,7 @@ namespace ET
             view.E_SendVerificationButton.interactable = true;
         }
 
-        static async void OnRegistBtnClick(this DlgRegist self)
+        static async void OnSubmitBtnClick(this DlgRegist self)
         {
             var view = self.View;
             var uiCmp = self.DomainScene().GetComponent<UIComponent>();
@@ -101,9 +98,9 @@ namespace ET
                 return;
             }
 
-            view.E_RegistButton.interactable = false;
+            view.E_SubmitButton.interactable = false;
             int result = await LoginHelper.Regist(self.ZoneScene(), view.E_EMailInputField.text, view.E_PasswordInputField.text, view.E_VerificationInputField.text);
-            view.E_RegistButton.interactable = true;
+            view.E_SubmitButton.interactable = true;
 
             if (result != 0)
                 DlgHelper.message = MessageHelper.GetMessage(result);
@@ -117,7 +114,7 @@ namespace ET
                 uiCmp.ShowWindow(WindowID.WindowID_Helper);
             }
 
-            bool CheckInput(InputField inputField,string name)
+            bool CheckInput(InputField inputField, string name)
             {
                 if (string.IsNullOrEmpty(inputField.text))
                 {
@@ -137,6 +134,27 @@ namespace ET
                 view.E_VerificationInputField.text =
                 view.E_PasswordInputField.text =
                 view.E_RePasswordInputField.text = string.Empty;
+
+            var scene = self.DomainScene();
+            var uiCmp = scene.GetComponent<UIComponent>();
+
+            switch (uiCmp.GetComponent<DlgRegistTypeComponent>().dlgType)
+            {
+                case DlgRegistType.RegistAccount:
+                    view.E_TitleText.text = "注册";
+                    view.E_SubmitTextText.text = "注     册";
+                    view.E_InfoImage.gameObject.SetActive(true);
+                    break;
+
+                case DlgRegistType.ForgotPassword:
+                default:
+                    view.E_TitleText.text = "重置密码";
+                    view.E_SubmitTextText.text = "提     交";
+                    view.E_InfoImage.gameObject.SetActive(false);
+                    break;
+            }
+
+            uiCmp.RemoveComponent<DlgRegistTypeComponent>();
         }
     }
 }

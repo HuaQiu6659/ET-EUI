@@ -536,10 +536,10 @@ namespace ET
 		public string EMail { get; set; }
 
 		[ProtoMember(2)]
-		public string Password { get; set; }
+		public string Verification { get; set; }
 
 		[ProtoMember(3)]
-		public string Verification { get; set; }
+		public string Password { get; set; }
 
 	}
 
@@ -567,7 +567,7 @@ namespace ET
 		public int RpcId { get; set; }
 
 		[ProtoMember(1)]
-		public string Email { get; set; }
+		public string EMail { get; set; }
 
 		[ProtoMember(2)]
 		public string Password { get; set; }

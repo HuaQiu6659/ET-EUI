@@ -263,8 +263,8 @@ message C2A_Regist // IRequest
 	int32 RpcId = 90;
 
 	string EMail = 1;
-	string Password = 2;
-	string Verification = 3;
+	string Verification = 2;
+	string Password = 3;
 }
 
 message A2C_Regist //IResponse
@@ -279,7 +279,7 @@ message C2A_LoginAccount // IRequest
 {
 	int32 RpcId = 90;
 
-	string Email = 1;
+	string EMail = 1;
 	string Password = 2;
 }
 

@@ -1,25 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace ET
 {
-	public static class DlgLoginSystem
-	{
+    [FriendClassAttribute(typeof(DlgRegistTypeComponent))]
+    public static class DlgLoginSystem
+    {
         #region ------------- 响应事件 -------------
 
         public static void RegisterUIEvent(this DlgLogin self)
         {
             var view = self.View;
             view.E_LoginButton.AddListenerAsync(self.OnLoginClickHandler);
-            view.E_AccountInputField.onValueChanged.AddListener(input => self.View.E_PasswordInputField.text = string.Empty);
+            view.E_EMailInputField.onValueChanged.AddListener(input => self.View.E_PasswordInputField.text = string.Empty);
             view.E_PasswordInputField.onValueChanged.AddListener(self.OnPasswordInput);
             view.E_PasswordVisitableToggle.AddListener(self.OnPasswordVisitableToggleValueChanged);
             view.E_RegistButton.AddListener(self.OnRegistBtnClick);
-            view.E_ForgotButton.AddListener(self.OnRegistBtnClick);
+            view.E_ForgotButton.AddListener(self.OnForgotBtnClick);
         }
 
         static async ETTask OnLoginClickHandler(this DlgLogin self)
@@ -31,11 +29,11 @@ namespace ET
 
             try
             {
-                string account = view.E_AccountInputField.text;
+                string email = view.E_EMailInputField.text;
                 string password = view.E_PasswordInputField.text;
                 int error = await LoginHelper.Login(
                     self.DomainScene(),
-                    account,
+                    email,
                     password);
 
                 if (error != ErrorCode.ERR_Success)
@@ -49,7 +47,7 @@ namespace ET
                 uiCmp.HideWindow(WindowID.WindowID_Login);
                 uiCmp.ShowWindow(WindowID.WindowID_ServerList);
 
-                PlayerPrefs.SetString("Account", account);
+                PlayerPrefs.SetString("EMail", email);
                 PlayerPrefs.SetString("Password", password);
             }
             catch (Exception e)
@@ -73,13 +71,22 @@ namespace ET
         static void OnPasswordInput(this DlgLogin self, string input)
         {
             var view = self.View;
-            bool isEmail = StringHelper.IsEmail(view.E_AccountInputField.text);
+            bool isEmail = StringHelper.IsEmail(view.E_EMailInputField.text);
             view.E_LoginButton.interactable = input.Length >= 6 && input.Length <= 20 && isEmail;
         }
 
         static void OnRegistBtnClick(this DlgLogin self)
         {
             var uiCmp = self.DomainScene().GetComponent<UIComponent>();
+            uiCmp.AddComponent<DlgRegistTypeComponent>().dlgType = DlgRegistType.RegistAccount;
+            uiCmp.HideWindow(WindowID.WindowID_Login);
+            uiCmp.ShowWindow(WindowID.WindowID_Regist);
+        }
+
+        static void OnForgotBtnClick(this DlgLogin self)
+        {
+            var uiCmp = self.DomainScene().GetComponent<UIComponent>();
+            uiCmp.AddComponent<DlgRegistTypeComponent>().dlgType = DlgRegistType.ForgotPassword;
             uiCmp.HideWindow(WindowID.WindowID_Login);
             uiCmp.ShowWindow(WindowID.WindowID_Regist);
         }
@@ -88,18 +95,18 @@ namespace ET
 
         public static void ShowWindow(this DlgLogin self, Entity contextData = null)
         {
-			var view = self.View;
-            view.E_AccountInputField.text = PlayerPrefs.GetString("Account", default);
+            var view = self.View;
+            view.E_EMailInputField.text = PlayerPrefs.GetString("EMail", default);
             view.E_PasswordInputField.text = PlayerPrefs.GetString("Password", default);
         }
-		
-		public static void HideWindow(this DlgLogin self)
-		{
 
-		}
-	}
+        public static void HideWindow(this DlgLogin self)
+        {
 
-	public class DlgLoginAwakeSystem : AwakeSystem<DlgLogin>
+        }
+    }
+
+    public class DlgLoginAwakeSystem : AwakeSystem<DlgLogin>
 	{
 		public override void Awake(DlgLogin self) { }
     }

@@ -143,7 +143,7 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.InputField E_AccountInputField
+		public UnityEngine.UI.InputField E_EMailInputField
      	{
      		get
      		{
@@ -152,15 +152,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_AccountInputField == null )
+     			if( this.m_E_EMailInputField == null )
      			{
-		    		this.m_E_AccountInputField = UIFindHelper.FindDeepChild<UnityEngine.UI.InputField>(this.uiTransform.gameObject,"E_Account");
+		    		this.m_E_EMailInputField = UIFindHelper.FindDeepChild<UnityEngine.UI.InputField>(this.uiTransform.gameObject,"E_EMail");
      			}
-     			return this.m_E_AccountInputField;
+     			return this.m_E_EMailInputField;
      		}
      	}
 
-		public UnityEngine.UI.Image E_AccountImage
+		public UnityEngine.UI.Image E_EMailImage
      	{
      		get
      		{
@@ -169,11 +169,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_E_AccountImage == null )
+     			if( this.m_E_EMailImage == null )
      			{
-		    		this.m_E_AccountImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_Account");
+		    		this.m_E_EMailImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"E_EMail");
      			}
-     			return this.m_E_AccountImage;
+     			return this.m_E_EMailImage;
      		}
      	}
 
@@ -272,8 +272,8 @@ namespace ET
 			this.m_E_ForgotText = null;
 			this.m_E_LoginButton = null;
 			this.m_E_LoginImage = null;
-			this.m_E_AccountInputField = null;
-			this.m_E_AccountImage = null;
+			this.m_E_EMailInputField = null;
+			this.m_E_EMailImage = null;
 			this.m_E_PasswordInputField = null;
 			this.m_E_PasswordImage = null;
 			this.m_E_PasswordVisitableToggle = null;
@@ -290,8 +290,8 @@ namespace ET
 		private UnityEngine.UI.Text m_E_ForgotText = null;
 		private UnityEngine.UI.Button m_E_LoginButton = null;
 		private UnityEngine.UI.Image m_E_LoginImage = null;
-		private UnityEngine.UI.InputField m_E_AccountInputField = null;
-		private UnityEngine.UI.Image m_E_AccountImage = null;
+		private UnityEngine.UI.InputField m_E_EMailInputField = null;
+		private UnityEngine.UI.Image m_E_EMailImage = null;
 		private UnityEngine.UI.InputField m_E_PasswordInputField = null;
 		private UnityEngine.UI.Image m_E_PasswordImage = null;
 		private UnityEngine.UI.Toggle m_E_PasswordVisitableToggle = null;

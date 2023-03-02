@@ -63,7 +63,7 @@ namespace ET
             try
             {
                 accountSession = zoneScene.GetComponent<NetKcpComponent>().Create(NetworkHelper.ToIPEndPoint(ConstValue.LoginAddress));
-                a2C_Login = (A2C_LoginAccount)await accountSession.Call(new C2A_LoginAccount() { Email = email, Password = MD5Helper.StringMD5(password) });
+                a2C_Login = (A2C_LoginAccount)await accountSession.Call(new C2A_LoginAccount() { EMail = email, Password = MD5Helper.StringMD5(password) });
 
                 if (a2C_Login.Error != ErrorCode.ERR_Success)
                     return LoginError(a2C_Login.Error);

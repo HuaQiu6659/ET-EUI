@@ -28,7 +28,7 @@ namespace ET
             }
 
             //限长度，防注入
-            if (!Regex.IsMatch(request.Password, @"^[a-zA-Z0-9]+$")
+            if (StringHelper.HasSymbol(request.Password)
                 || !StringHelper.IsEmail(request.EMail))
             {
                 session.Reply(response, reply, ErrorCode.ERR_IllegalInput, true);
