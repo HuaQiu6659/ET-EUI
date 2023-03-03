@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace ET
 {
     [FriendClass(typeof(ServerInfoManagerComponent))]
-    public class C2A_GetServerInfoRequestHandler : AMRpcHandler<C2A_GetServerInfoRequest, A2C_GetServerInfoResponse>
+    public class C2A_GetServerInfoHandler : AMRpcHandler<C2A_GetServerInfo, A2C_GetServerInfo>
     {
-        protected override async ETTask Run(Session session, C2A_GetServerInfoRequest request, A2C_GetServerInfoResponse response, Action reply)
+        protected override async ETTask Run(Session session, C2A_GetServerInfo request, A2C_GetServerInfo response, Action reply)
         {
             if (!session.CheckScene(SceneType.Account))
                 return;

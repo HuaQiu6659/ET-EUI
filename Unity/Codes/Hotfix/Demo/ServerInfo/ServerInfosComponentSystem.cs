@@ -7,7 +7,7 @@ namespace ET
     {
         public static void Add(this ServerInfosComponent self, ServerInfo info)
         {
-            self.serverInfos.Add(info);
+            self.servers.Add(info);
         }
 
         public static void Add(this ServerInfosComponent self, List<ServerInfoProto> infoProtos)
@@ -16,7 +16,7 @@ namespace ET
             {
                 var result = new ServerInfo();
                 result.FromMessage(info);
-                self.serverInfos.Add(result);
+                self.servers.Add(result);
             }
         }
     }
@@ -26,7 +26,7 @@ namespace ET
     {
         public override void Awake(ServerInfosComponent self)
         {
-            self.serverInfos.ClearEntityList();
+            self.servers = new List<ServerInfo>();
         }
     }
 
@@ -35,7 +35,7 @@ namespace ET
     {
         public override void Destroy(ServerInfosComponent self)
         {
-            self.serverInfos.ClearEntityList();
+            self.servers.ClearEntityList();
         }
     }
 }

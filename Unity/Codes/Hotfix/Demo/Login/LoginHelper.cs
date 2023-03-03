@@ -5,9 +5,7 @@ using System.Security.Principal;
 
 namespace ET
 {
-    [FriendClass(typeof(ServerInfosComponent)),
-        FriendClass(typeof(RoleInfosComponent))]
-    [FriendClass(typeof(ET.RoleInfo))]
+    [FriendClass(typeof(ServerInfosComponent))]
     public static class LoginHelper
     {
         public static async ETTask<A2C_Verification> SendRegistVerification(Scene zoneScene, string email)
@@ -95,11 +93,11 @@ namespace ET
 
         public static async ETTask<int> GetServerInfos(Scene zoneScene)
         {
-            A2C_GetServerInfoResponse response = null;
+            A2C_GetServerInfo response = null;
             try
             {
                 AccountInfoComponent accountInfo = zoneScene.GetComponent<AccountInfoComponent>();
-                response = (A2C_GetServerInfoResponse)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetServerInfoRequest()
+                response = (A2C_GetServerInfo)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_GetServerInfo()
                 {
                     AccountId = accountInfo.AccountId,
                     Token = accountInfo.Token
@@ -119,144 +117,15 @@ namespace ET
             return ErrorCode.ERR_Success;
         }
 
-        /// <summary>
-        /// 获取角色列表并保存到管理组件中
-        /// </summary>
-        /// <param name="zoneScene"></param>
-        /// <returns></returns>
-        public static async ETTask<int> GetRoles(Scene zoneScene)
-        {
-            //请求角色列表
-            var session = zoneScene.GetComponent<SessionComponent>().Session;
-            var accountInfo = zoneScene.GetComponent<AccountInfoComponent>();
-            var serverInfos = zoneScene.GetComponent<ServerInfosComponent>();
-
-            A2C_GetRolesResponse response = null;
-            try
-            {
-                response = (A2C_GetRolesResponse)await session.Call(new C2A_GetRolesRequest()
-                {
-                    AccountId = accountInfo.AccountId,
-                    ServerId = serverInfos.currentServerId,
-                    Token = accountInfo.Token
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Error(e.Message);
-                return ErrorCode.ERR_NetworkError;
-            }
-
-            if (response.Error != ErrorCode.ERR_Success)
-            {
-                Log.Error(response.Error.ToString());
-                return response.Error;
-            }
-
-            //保存角色列表信息
-            var rolesCmp = zoneScene.GetComponent<RoleInfosComponent>();
-            rolesCmp.ClearRoles();
-            if (response.Roles?.Count > 0)
-            {
-                foreach (var proto in response.Roles)
-                {
-                    var newRole = new RoleInfo();
-                    newRole.FromMessage(proto);
-
-                    //Freeze状态为已被删除的角色
-                    if (newRole.status == RoleStatus.Freeze)
-                    {
-                        newRole.Dispose();
-                        continue;
-                    }
-                    rolesCmp.roles.Add(newRole);
-                }
-            }
-
-            return ErrorCode.ERR_Success;
-        }
-
-        public static async ETTask<int> CreateRole(Scene zoneScene, string roleName)
-        {
-            A2C_CreateRoleResponse response = null;
-
-            try
-            {
-                AccountInfoComponent accountInfoComponent = zoneScene.GetComponent<AccountInfoComponent>();
-                response = (A2C_CreateRoleResponse)await zoneScene.GetComponent<SessionComponent>().Session.Call(new C2A_CreateRoleRequest()
-                {
-                    RoleName = roleName,
-                    AccountId = accountInfoComponent.AccountId,
-                    Token = accountInfoComponent.Token,
-                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().currentServerId
-                });
-
-            }
-            catch (Exception e)
-            {
-                Log.Error(e.Message);
-                return ErrorCode.ERR_NetworkError;
-            }
-
-            //创建失败
-            if (response.Error != ErrorCode.ERR_Success)
-            {
-                Log.Error(response.Error.ToString());
-                return response.Error;
-            }
-
-            //存入列表
-            var roleInfosCmp = zoneScene.GetComponent<RoleInfosComponent>();
-            RoleInfo newRole = roleInfosCmp.AddChild<RoleInfo>();
-            newRole.FromMessage(response.RoleInfo);
-            roleInfosCmp.roles.Add(newRole);
-
-            return ErrorCode.ERR_Success;
-        }
-
-        public static async ETTask<int> DeleteRole(Scene zoneScene, string roleName)
-        {
-            var session = zoneScene.GetComponent<SessionComponent>().Session;
-            var accountInfo = zoneScene.GetComponent<AccountInfoComponent>();
-
-            A2C_DeleteRoleResponse response = null;
-
-            try
-            {
-                response = (A2C_DeleteRoleResponse)await session.Call(new C2A_DeleteRoleRequest()
-                {
-                    AccountId = accountInfo.AccountId,
-                    ServerId = zoneScene.GetComponent<ServerInfosComponent>().currentServerId,
-                    RoleName = roleName,
-                    Token = accountInfo.Token
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Error(e.Message);
-                return ErrorCode.ERR_NetworkError;
-            }
-
-            if (response.Error != ErrorCode.ERR_Success)
-            {
-                Log.Error(response.Error.ToString());
-                return response.Error;
-            }
-
-            //移除组件中的信息记录
-            zoneScene.GetComponent<RoleInfosComponent>().RemoveRole(roleName);
-            return ErrorCode.ERR_Success;
-        }
-
         public static async ETTask<int> GetRealmKey(Scene zoneScene)
         {
             var session = zoneScene.GetComponent<SessionComponent>().Session;
             var accountInfo = zoneScene.GetComponent<AccountInfoComponent>();
 
-            A2C_GetRealmKeyResponse response = null;
+            A2C_GetRealmKey response = null;
             try
             {
-                response = (A2C_GetRealmKeyResponse) await session.Call(new C2A_GetRealmKeyRequest()
+                response = (A2C_GetRealmKey) await session.Call(new C2A_GetRealmKey()
                 {
                     AccountId = accountInfo.AccountId,
                     ServerId = zoneScene.GetComponent<ServerInfosComponent>().currentServerId,
@@ -290,11 +159,11 @@ namespace ET
             var netKcpCmp = zoneScene.GetComponent<NetKcpComponent>();
 
             //1.连接Realm，获取分配的Gate
-            R2C_LoginRealmResponse r2C_LoginRealmResponse = null;
+            R2C_LoginRealm r2C_LoginRealmResponse = null;
             Session session = netKcpCmp.Create(NetworkHelper.ToIPEndPoint(realmAddress));
             try
             {
-                r2C_LoginRealmResponse = (R2C_LoginRealmResponse)await session.Call(new C2R_LoginRealmRequest() 
+                r2C_LoginRealmResponse = (R2C_LoginRealm)await session.Call(new C2R_LoginRealm() 
                 { 
                     AccountId = accountInfoCmp.AccountId, 
                     RealmKey = accountInfoCmp.RealmKey 
@@ -320,15 +189,14 @@ namespace ET
             zoneScene.GetComponent<SessionComponent>().Session = session;
 
             //2.连接Gate
-            long currentRoleId = zoneScene.GetComponent<RoleInfosComponent>().currentRoleId;
-            G2C_LoginGameGateResponse g2C_LoginGate = null;
+            G2C_LoginGameGate g2C_LoginGate = null;
             try
             {
-                g2C_LoginGate = (G2C_LoginGameGateResponse)await session.Call(new C2G_LoginGameGateRequest()
+                g2C_LoginGate = (G2C_LoginGameGate)await session.Call(new C2G_LoginGameGate()
                 {
                     AccountId = accountInfoCmp.AccountId,
-                    Key = r2C_LoginRealmResponse.GateSessionKey,
-                    RoleId = currentRoleId
+                    Key = r2C_LoginRealmResponse.GateSessionKey
+                   //RoleId = currentRoleId
                 });
             }
             catch (Exception e)
@@ -344,10 +212,10 @@ namespace ET
             Log.Debug("登录Gate成功");
 
             //3.角色正式请求进入游戏逻辑服
-            G2C_EnterGameResponse enterGameResponse = null;
+            G2C_EnterGame enterGameResponse = null;
             try
             {
-                enterGameResponse = (G2C_EnterGameResponse)await session.Call(new C2G_EnterGameRequest());
+                enterGameResponse = (G2C_EnterGame)await session.Call(new C2G_EnterGame());
             }
             catch (Exception e)
             {

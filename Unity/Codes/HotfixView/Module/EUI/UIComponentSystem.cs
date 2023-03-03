@@ -250,6 +250,14 @@ namespace ET
             
             self.PopNextStackUIBaseWindow(id);
         }
+
+        public static async void TransferWindow(this UIComponent self, WindowID from, WindowID to, int interval = 0)
+        {
+            self.HideWindow(from);
+            if (interval != 0)
+                await TimerComponent.Instance.WaitAsync(interval);
+            self.ShowWindow(to);
+        }
         
         /// <summary>
         /// 根据泛型类型隐藏UI窗口

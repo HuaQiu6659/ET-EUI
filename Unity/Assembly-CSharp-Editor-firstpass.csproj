@@ -61,11 +61,13 @@
     <Compile Include="Assets\Plugins\Lin\Editor\PathHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.dll" />
     <None Include="Assets\Plugins\Lin\Editor\ScriptTemplate\ScriptTemplates\4-Scripts__Struct-NewStruct.txt" />
     <None Include="Assets\Plugins\Lin\Editor\ScriptTemplate\ScriptTemplates\5-Scripts__Interface-NewInterface.txt" />
     <None Include="Assets\Plugins\Lin\Editor\ScriptTemplate\ScriptTemplates\3-Scripts__Class-NewClass.txt" />
     <None Include="Assets\Plugins\Lin\Editor\ScriptTemplate\ScriptTemplates\2-Scripts__ScriptableObject-NewScriptableObject.cs.txt" />
     <None Include="Assets\Plugins\Lin\Editor\ScriptTemplate\ScriptTemplates\1-Scripts__MonoBehaviour-NewBehaviour.cs.txt" />
+    <None Include="Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.XML" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -349,6 +351,12 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>Assets\Plugins\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTweenEditor">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
@@ -767,6 +775,9 @@
     <Reference Include="Unity.Searcher.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
@@ -776,11 +787,11 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
@@ -811,6 +822,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{2662B409-6332-1E56-D797-C9025C53BDD6}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
     <ProjectReference Include="Unity.Editor.csproj">
       <Project>{CD311104-1830-B119-81B6-5DBEE2467FFB}</Project>
       <Name>Unity.Editor</Name>

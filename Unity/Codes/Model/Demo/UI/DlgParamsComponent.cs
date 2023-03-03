@@ -10,6 +10,6 @@ namespace ET
     [ComponentOf]
     public class DlgParamsComponent : Entity, IAwake
     {
-        public Dictionary<Type, IDictionary> objectParams;
+        public Dictionary<Type, IDictionary> objects;
     }
 }

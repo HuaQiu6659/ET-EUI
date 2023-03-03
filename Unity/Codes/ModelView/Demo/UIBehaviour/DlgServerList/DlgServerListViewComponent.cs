@@ -7,7 +7,7 @@ namespace ET
 	[EnableMethod]
 	public  class DlgServerListViewComponent : Entity,IAwake,IDestroy 
 	{
-		public UnityEngine.UI.Button EButton_DecidedButton
+		public UnityEngine.UI.Button E_CloseButton
      	{
      		get
      		{
@@ -16,15 +16,15 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_EButton_DecidedButton == null )
+     			if( this.m_E_CloseButton == null )
      			{
-		    		this.m_EButton_DecidedButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"EButton_Decided");
+		    		this.m_E_CloseButton = UIFindHelper.FindDeepChild<UnityEngine.UI.Button>(this.uiTransform.gameObject,"Popup_TitleBar/E_Close");
      			}
-     			return this.m_EButton_DecidedButton;
+     			return this.m_E_CloseButton;
      		}
      	}
 
-		public UnityEngine.UI.Image EButton_DecidedImage
+		public UnityEngine.UI.Image E_CloseImage
      	{
      		get
      		{
@@ -33,11 +33,11 @@ namespace ET
      				Log.Error("uiTransform is null.");
      				return null;
      			}
-     			if( this.m_EButton_DecidedImage == null )
+     			if( this.m_E_CloseImage == null )
      			{
-		    		this.m_EButton_DecidedImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"EButton_Decided");
+		    		this.m_E_CloseImage = UIFindHelper.FindDeepChild<UnityEngine.UI.Image>(this.uiTransform.gameObject,"Popup_TitleBar/E_Close");
      			}
-     			return this.m_EButton_DecidedImage;
+     			return this.m_E_CloseImage;
      		}
      	}
 
@@ -58,36 +58,17 @@ namespace ET
      		}
      	}
 
-		public UnityEngine.UI.Text ELabel_SelectServerText
-     	{
-     		get
-     		{
-     			if (this.uiTransform == null)
-     			{
-     				Log.Error("uiTransform is null.");
-     				return null;
-     			}
-     			if( this.m_ELabel_SelectServerText == null )
-     			{
-		    		this.m_ELabel_SelectServerText = UIFindHelper.FindDeepChild<UnityEngine.UI.Text>(this.uiTransform.gameObject,"ELabel_SelectServer");
-     			}
-     			return this.m_ELabel_SelectServerText;
-     		}
-     	}
-
 		public void DestroyWidget()
 		{
-			this.m_EButton_DecidedButton = null;
-			this.m_EButton_DecidedImage = null;
+			this.m_E_CloseButton = null;
+			this.m_E_CloseImage = null;
 			this.m_ELoopScrollList_ServerlistLoopVerticalScrollRect = null;
-			this.m_ELabel_SelectServerText = null;
 			this.uiTransform = null;
 		}
 
-		private UnityEngine.UI.Button m_EButton_DecidedButton = null;
-		private UnityEngine.UI.Image m_EButton_DecidedImage = null;
+		private UnityEngine.UI.Button m_E_CloseButton = null;
+		private UnityEngine.UI.Image m_E_CloseImage = null;
 		private UnityEngine.UI.LoopVerticalScrollRect m_ELoopScrollList_ServerlistLoopVerticalScrollRect = null;
-		private UnityEngine.UI.Text m_ELabel_SelectServerText = null;
 		public Transform uiTransform = null;
 	}
 }

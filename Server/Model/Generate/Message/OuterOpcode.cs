@@ -40,22 +40,15 @@ namespace ET
 		 public const ushort A2C_LoginAccount = 10037;
 		 public const ushort A2C_Disconnect = 10038;
 		 public const ushort ServerInfoProto = 10039;
-		 public const ushort C2A_GetServerInfoRequest = 10040;
-		 public const ushort RoleInfoProto = 10041;
-		 public const ushort A2C_GetServerInfoResponse = 10042;
-		 public const ushort C2A_CreateRoleRequest = 10043;
-		 public const ushort A2C_CreateRoleResponse = 10044;
-		 public const ushort C2A_GetRolesRequest = 10045;
-		 public const ushort A2C_GetRolesResponse = 10046;
-		 public const ushort C2A_DeleteRoleRequest = 10047;
-		 public const ushort A2C_DeleteRoleResponse = 10048;
-		 public const ushort C2A_GetRealmKeyRequest = 10049;
-		 public const ushort A2C_GetRealmKeyResponse = 10050;
-		 public const ushort C2R_LoginRealmRequest = 10051;
-		 public const ushort R2C_LoginRealmResponse = 10052;
-		 public const ushort C2G_LoginGameGateRequest = 10053;
-		 public const ushort G2C_LoginGameGateResponse = 10054;
-		 public const ushort C2G_EnterGameRequest = 10055;
-		 public const ushort G2C_EnterGameResponse = 10056;
+		 public const ushort C2A_GetServerInfo = 10040;
+		 public const ushort A2C_GetServerInfo = 10041;
+		 public const ushort C2A_GetRealmKey = 10042;
+		 public const ushort A2C_GetRealmKey = 10043;
+		 public const ushort C2R_LoginRealm = 10044;
+		 public const ushort R2C_LoginRealm = 10045;
+		 public const ushort C2G_LoginGameGate = 10046;
+		 public const ushort G2C_LoginGameGate = 10047;
+		 public const ushort C2G_EnterGame = 10048;
+		 public const ushort G2C_EnterGame = 10049;
 	}
 }

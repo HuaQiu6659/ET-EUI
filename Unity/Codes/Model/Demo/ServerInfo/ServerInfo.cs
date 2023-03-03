@@ -13,7 +13,9 @@ namespace ET
 
     public enum ServerStatus
     {
-        Normal,
+        Normal, //空闲
+        Crowd,  //拥挤
+        Full,   //爆满
         Maintain,   //维护
         Stop
     }

@@ -2,9 +2,9 @@
 
 namespace ET
 {
-    public class C2R_LoginRealmRequestHandler : AMRpcHandler<C2R_LoginRealmRequest, R2C_LoginRealmResponse>
+    public class C2R_LoginRealmHandler : AMRpcHandler<C2R_LoginRealm, R2C_LoginRealm>
     {
-        protected override async ETTask Run(Session session, C2R_LoginRealmRequest request, R2C_LoginRealmResponse response, Action reply)
+        protected override async ETTask Run(Session session, C2R_LoginRealm request, R2C_LoginRealm response, Action reply)
         {
             if (!session.CheckScene(SceneType.Realm))
                 return;

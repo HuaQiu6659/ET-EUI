@@ -5,9 +5,9 @@ namespace ET
     [FriendClassAttribute(typeof(ET.SessionPlayerComponent))]
     [FriendClassAttribute(typeof(ET.GateMapComponent))]
     [FriendClassAttribute(typeof(ET.SessionStateComponent))]
-    public class C2G_EnterGameRequestHandler : AMRpcHandler<C2G_EnterGameRequest, G2C_EnterGameResponse>
+    public class C2G_EnterGameHandler : AMRpcHandler<C2G_EnterGame, G2C_EnterGame>
     {
-        protected override async ETTask Run(Session session, C2G_EnterGameRequest request, G2C_EnterGameResponse response, Action reply)
+        protected override async ETTask Run(Session session, C2G_EnterGame request, G2C_EnterGame response, Action reply)
         {
             if (!session.CheckScene(SceneType.Gate))
                 return;

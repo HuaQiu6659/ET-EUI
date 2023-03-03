@@ -9,8 +9,10 @@ namespace ET
     {
         public string email;
         public string password;
-        public long createTime;
         public AccountType accountType;
+
+        public long createTime;
+        public long lastLoginTime;
     }
 
     public enum AccountType

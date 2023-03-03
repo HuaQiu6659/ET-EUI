@@ -604,6 +604,7 @@ namespace ET
 
 	}
 
+//游戏频道
 	[Message(OuterOpcode.ServerInfoProto)]
 	[ProtoContract]
 	public partial class ServerInfoProto: Object
@@ -619,10 +620,10 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(A2C_LoginAccount))]
-	[Message(OuterOpcode.C2A_GetServerInfoRequest)]
+	[ResponseType(nameof(A2C_GetServerInfo))]
+	[Message(OuterOpcode.C2A_GetServerInfo)]
 	[ProtoContract]
-	public partial class C2A_GetServerInfoRequest: Object, IRequest
+	public partial class C2A_GetServerInfo: Object, IRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -635,36 +636,9 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.RoleInfoProto)]
+	[Message(OuterOpcode.A2C_GetServerInfo)]
 	[ProtoContract]
-	public partial class RoleInfoProto: Object
-	{
-		[ProtoMember(1)]
-		public long Id { get; set; }
-
-		[ProtoMember(2)]
-		public string Name { get; set; }
-
-		[ProtoMember(3)]
-		public int Status { get; set; }
-
-		[ProtoMember(4)]
-		public long AccountId { get; set; }
-
-		[ProtoMember(5)]
-		public long LastLoginTime { get; set; }
-
-		[ProtoMember(6)]
-		public long CreateTime { get; set; }
-
-		[ProtoMember(7)]
-		public int ServerId { get; set; }
-
-	}
-
-	[Message(OuterOpcode.A2C_GetServerInfoResponse)]
-	[ProtoContract]
-	public partial class A2C_GetServerInfoResponse: Object, IResponse
+	public partial class A2C_GetServerInfo: Object, IResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -680,50 +654,10 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(A2C_CreateRoleResponse))]
-	[Message(OuterOpcode.C2A_CreateRoleRequest)]
+	[ResponseType(nameof(A2C_GetRealmKey))]
+	[Message(OuterOpcode.C2A_GetRealmKey)]
 	[ProtoContract]
-	public partial class C2A_CreateRoleRequest: Object, IRequest
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(1)]
-		public string Token { get; set; }
-
-		[ProtoMember(2)]
-		public long AccountId { get; set; }
-
-		[ProtoMember(3)]
-		public string RoleName { get; set; }
-
-		[ProtoMember(4)]
-		public int ServerId { get; set; }
-
-	}
-
-	[Message(OuterOpcode.A2C_CreateRoleResponse)]
-	[ProtoContract]
-	public partial class A2C_CreateRoleResponse: Object, IResponse
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(91)]
-		public int Error { get; set; }
-
-		[ProtoMember(92)]
-		public string Message { get; set; }
-
-		[ProtoMember(1)]
-		public RoleInfoProto RoleInfo { get; set; }
-
-	}
-
-	[ResponseType(nameof(C2A_GetRolesRequest))]
-	[Message(OuterOpcode.C2A_GetRolesRequest)]
-	[ProtoContract]
-	public partial class C2A_GetRolesRequest: Object, IRequest
+	public partial class C2A_GetRealmKey: Object, IRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -739,83 +673,9 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.A2C_GetRolesResponse)]
+	[Message(OuterOpcode.A2C_GetRealmKey)]
 	[ProtoContract]
-	public partial class A2C_GetRolesResponse: Object, IResponse
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(91)]
-		public int Error { get; set; }
-
-		[ProtoMember(92)]
-		public string Message { get; set; }
-
-		[ProtoMember(1)]
-		public List<RoleInfoProto> Roles = new List<RoleInfoProto>();
-
-	}
-
-	[ResponseType(nameof(A2C_DeleteRoleResponse))]
-	[Message(OuterOpcode.C2A_DeleteRoleRequest)]
-	[ProtoContract]
-	public partial class C2A_DeleteRoleRequest: Object, IRequest
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(1)]
-		public string Token { get; set; }
-
-		[ProtoMember(2)]
-		public long AccountId { get; set; }
-
-		[ProtoMember(3)]
-		public int ServerId { get; set; }
-
-		[ProtoMember(4)]
-		public string RoleName { get; set; }
-
-	}
-
-	[Message(OuterOpcode.A2C_DeleteRoleResponse)]
-	[ProtoContract]
-	public partial class A2C_DeleteRoleResponse: Object, IResponse
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(91)]
-		public int Error { get; set; }
-
-		[ProtoMember(92)]
-		public string Message { get; set; }
-
-	}
-
-	[ResponseType(nameof(A2C_GetRealmKeyResponse))]
-	[Message(OuterOpcode.C2A_GetRealmKeyRequest)]
-	[ProtoContract]
-	public partial class C2A_GetRealmKeyRequest: Object, IRequest
-	{
-		[ProtoMember(90)]
-		public int RpcId { get; set; }
-
-		[ProtoMember(1)]
-		public string Token { get; set; }
-
-		[ProtoMember(2)]
-		public long AccountId { get; set; }
-
-		[ProtoMember(3)]
-		public int ServerId { get; set; }
-
-	}
-
-	[Message(OuterOpcode.A2C_GetRealmKeyResponse)]
-	[ProtoContract]
-	public partial class A2C_GetRealmKeyResponse: Object, IResponse
+	public partial class A2C_GetRealmKey: Object, IResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -834,10 +694,10 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(R2C_LoginRealmResponse))]
-	[Message(OuterOpcode.C2R_LoginRealmRequest)]
+	[ResponseType(nameof(R2C_LoginRealm))]
+	[Message(OuterOpcode.C2R_LoginRealm)]
 	[ProtoContract]
-	public partial class C2R_LoginRealmRequest: Object, IRequest
+	public partial class C2R_LoginRealm: Object, IRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -850,9 +710,9 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.R2C_LoginRealmResponse)]
+	[Message(OuterOpcode.R2C_LoginRealm)]
 	[ProtoContract]
-	public partial class R2C_LoginRealmResponse: Object, IResponse
+	public partial class R2C_LoginRealm: Object, IResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -871,10 +731,10 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(G2C_LoginGameGateResponse))]
-	[Message(OuterOpcode.C2G_LoginGameGateRequest)]
+	[ResponseType(nameof(G2C_LoginGameGate))]
+	[Message(OuterOpcode.C2G_LoginGameGate)]
 	[ProtoContract]
-	public partial class C2G_LoginGameGateRequest: Object, IRequest
+	public partial class C2G_LoginGameGate: Object, IRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -890,9 +750,9 @@ namespace ET
 
 	}
 
-	[Message(OuterOpcode.G2C_LoginGameGateResponse)]
+	[Message(OuterOpcode.G2C_LoginGameGate)]
 	[ProtoContract]
-	public partial class G2C_LoginGameGateResponse: Object, IResponse
+	public partial class G2C_LoginGameGate: Object, IResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
@@ -908,19 +768,19 @@ namespace ET
 
 	}
 
-	[ResponseType(nameof(G2C_EnterGameResponse))]
-	[Message(OuterOpcode.C2G_EnterGameRequest)]
+	[ResponseType(nameof(G2C_EnterGame))]
+	[Message(OuterOpcode.C2G_EnterGame)]
 	[ProtoContract]
-	public partial class C2G_EnterGameRequest: Object, IRequest
+	public partial class C2G_EnterGame: Object, IRequest
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }
 
 	}
 
-	[Message(OuterOpcode.G2C_EnterGameResponse)]
+	[Message(OuterOpcode.G2C_EnterGame)]
 	[ProtoContract]
-	public partial class G2C_EnterGameResponse: Object, IResponse
+	public partial class G2C_EnterGame: Object, IResponse
 	{
 		[ProtoMember(90)]
 		public int RpcId { get; set; }

@@ -4,25 +4,24 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
+using Toggle = UnityEngine.UI.Toggle;
 
 namespace ET
 {
 	[FriendClass(typeof(DlgServerList)), FriendClass(typeof(ServerInfosComponent))]
-	[FriendClass(typeof(Scroll_Item_SeverToggle))]
+	[FriendClass(typeof(Scroll_Item_ServerToggle))]
 	[FriendClassAttribute(typeof(ET.ServerInfo))]
 	public static class DlgServerListSystem
 	{
-
 		public static void RegisterUIEvent(this DlgServerList self)
 		{
-			//Mark:据说一定要用Lambda表达式包裹，不然热更新不生效
+			//Mark:据说一定要用Lambda表达式包裹，不然热更新不生效？
 			self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.AddItemRefreshListener(self.OnLoopItemRefresh);
-			self.View.EButton_DecidedButton.AddListener(self.OnServerSelectDecideButtonClick);
 		}
 
 		public static async void ShowWindow(this DlgServerList self, Entity contextData = null)
 		{
-			self.View.EButton_DecidedButton.interactable = false;
 			var zoneScene = self.ZoneScene();
 			int error = await LoginHelper.GetServerInfos(zoneScene);
 			if (error != ErrorCode.ERR_Success)
@@ -31,69 +30,70 @@ namespace ET
 				return;
             }
             var serverInfosCmp = self.ZoneScene().GetComponent<ServerInfosComponent>();
-            self.AddUIScrollItems(ref self.serverToggleDict, serverInfosCmp.serverInfos.Count);
-            self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.SetVisible(true, serverInfosCmp.serverInfos.Count);
+			var toggleDict = self.GetToggleDict();
+            self.AddUIScrollItems(ref toggleDict, serverInfosCmp.servers.Count);
+            self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.SetVisible(true, serverInfosCmp.servers.Count);
 
             //显示窗口时重置已选择的服务器编号
-            zoneScene.GetComponent<ServerInfosComponent>().currentServerId = ServerInfosComponent.UnSelectId;
-			self.View.ELabel_SelectServerText.text = string.Empty;
+            serverInfosCmp.currentServerId = ServerInfosComponent.UnSelectId;
 			//self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.RefreshCells();
         }
 
-		public static void HideWindow(this DlgServerList self)
-		{
-			self.RemoveUIScrollItems(ref self.serverToggleDict);
-		}
+		static Dictionary<int, Scroll_Item_ServerToggle> GetToggleDict(this DlgServerList self)
+        {
+            var paramsCmp = self.GetComponent<DlgParamsComponent>();
+            return paramsCmp.GetValue<Dictionary<int, Scroll_Item_ServerToggle>>("serverToggleDict");
+        }
+
+		static ToggleGroup GetToggleGroup(this DlgServerList self)
+        {
+            var paramsCmp = self.GetComponent<DlgParamsComponent>();
+			return paramsCmp.GetValue<ToggleGroup>("toggleGroup");
+        }
+
+        public static void HideWindow(this DlgServerList self)
+        {
+            var toggleDict = self.GetToggleDict();
+            self.RemoveUIScrollItems(ref toggleDict);
+        }
 
 		static void OnLoopItemRefresh(this DlgServerList self, Transform trans, int index)
         {
 			//加载显示区服信息
 			var infosManager = self.ZoneScene().GetComponent<ServerInfosComponent>();
-            var info = infosManager.serverInfos[index];
-			var item = self.serverToggleDict[index];
+            var info = infosManager.servers[index];
+			if (!self.GetToggleDict().TryGetValue(index, out var item))
+                return;
 
-			item.uiTransform = trans;
-            item.ELabelText.text = info.serverName;
-
-			var selectedLabel = self.View.ELabel_SelectServerText;
-
-			var toggle = trans.GetComponent<Toggle>();
-			toggle.isOn = false;
-			toggle.group = self.toggleGroup;
-			toggle.onValueChanged.RemoveAllListeners();
-			toggle.onValueChanged.AddListener(isOn =>
+			var uiCmp = self.ZoneScene().GetComponent<UIComponent>();
+            item.uiTransform = trans;
+            item.E_LabelText.text = info.serverName;
+			item.E_EnterButton.AddListener(() =>
 			{
-				if (!isOn)
-				{
-					if (!self.toggleGroup.AnyTogglesOn())
-					{
-						infosManager.currentServerId = ServerInfosComponent.UnSelectId;
-                        self.View.EButton_DecidedButton.interactable = false;
-						selectedLabel.text = string.Empty;
-                    }
-                    return;
-                }
+				infosManager.currentServerId = index + 1;   //区号比编号大1
 
-				infosManager.currentServerId = index + 1;	//区号比编号大1
-                self.View.EButton_DecidedButton.interactable = true;
-                selectedLabel.text = info.serverName;
+				//TODO:获取账号物品信息
+					//TODO:无物品信息时显示创建角色引导
+
+				//TODO:获取、显示该频道房间列表
+				uiCmp.HideWindow(WindowID.WindowID_ServerList);
+
             });
+
+			var toogleGroup = self.GetToggleGroup();
+            var toggle = trans.GetComponent<Toggle>();
+			toggle.isOn = false;
+			toggle.group = toogleGroup;
         }
 
-		static void OnServerSelectDecideButtonClick(this DlgServerList self)
-		{
-			var uiCmp = self.DomainScene().GetComponent<UIComponent>();
-			uiCmp.HideWindow(WindowID.WindowID_ServerList);
-			uiCmp.ShowWindow(WindowID.WindowID_RoleList);
+        public class DlgServerListSystemAwakeSystem : AwakeSystem<DlgServerList>
+        {
+            public override void Awake(DlgServerList self)
+            {
+				var paramsCmp = self.AddComponent<DlgParamsComponent>();
+				paramsCmp.SetValue("serverToggleDict", new Dictionary<int, Scroll_Item_ServerToggle>());
+				paramsCmp.SetValue("toggleGroup", self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.content.GetComponent<ToggleGroup>());
+            }
         }
-	}
-
-	public class DlgServerListSystemAwakeSystem : AwakeSystem<DlgServerList>
-	{
-		public override void Awake(DlgServerList self)
-		{
-			self.serverToggleDict = new Dictionary<int, Scroll_Item_SeverToggle>();
-			self.toggleGroup = self.View.ELoopScrollList_ServerlistLoopVerticalScrollRect.content.GetComponent<ToggleGroup>();
-		}
-	}
+    }
 }

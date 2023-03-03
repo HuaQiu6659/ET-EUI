@@ -2,9 +2,9 @@
 
 namespace ET
 {
-    public class C2A_GetRealmKeyRequestHandler : AMRpcHandler<C2A_GetRealmKeyRequest, A2C_GetRealmKeyResponse>
+    public class C2A_GetRealmKeyHandler : AMRpcHandler<C2A_GetRealmKey, A2C_GetRealmKey>
     {
-        protected override async ETTask Run(Session session, C2A_GetRealmKeyRequest request, A2C_GetRealmKeyResponse response, Action reply)
+        protected override async ETTask Run(Session session, C2A_GetRealmKey request, A2C_GetRealmKey response, Action reply)
         {
             if (!session.CheckScene(SceneType.Account))
                 return;
